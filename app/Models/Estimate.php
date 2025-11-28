@@ -475,11 +475,11 @@ class Estimate extends Model implements HasMedia
     public function shouldShowShippingAddress()
     {
         $includeShippingAddress = $this->getCustomFieldValueBySlug('include_shipping_address');
-        
+
         if ($includeShippingAddress === null) {
             return false;
         }
-        
+
         return filter_var($includeShippingAddress, FILTER_VALIDATE_BOOLEAN);
     }
 
