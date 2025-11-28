@@ -344,7 +344,6 @@
         .pl-0 {
             padding-left: 0;
         }
-
     </style>
 
     @if (App::isLocale('th'))
@@ -358,7 +357,8 @@
             <tr>
                 <td width="50%" class="header-section-left">
                     @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
+                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}"
+                            alt="Company Logo">
                     @else
                         <h1 class="header-logo"> {{ $estimate->customer->company->name }} </h1>
                     @endif
@@ -382,12 +382,15 @@
                     @endif
                 </div>
 
-                <div @if ($estimate->customer->billingaddress) class="shipping-address-container shipping-address" @else class="shipping-address-container--left shipping-address" @endif>
-                    @if ($shipping_address)
-                        <b>@lang('pdf_ship_to')</b> <br>
-                        {!! $shipping_address !!}
-                    @endif
-                </div>
+                @if ($show_shipping_address)
+                    <div
+                        @if ($estimate->customer->billingaddress) class="shipping-address-container shipping-address" @else class="shipping-address-container--left shipping-address" @endif>
+                        @if ($shipping_address)
+                            <b>@lang('pdf_ship_to')</b> <br>
+                            {!! $shipping_address !!}
+                        @endif
+                    </div>
+                @endif
 
                 <div style="clear: both;"></div>
             </div>

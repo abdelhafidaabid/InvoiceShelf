@@ -326,7 +326,6 @@
         .pl-0 {
             padding-left: 0;
         }
-
     </style>
 
 </head>
@@ -337,7 +336,8 @@
             <tr>
                 <td class="text-center">
                     @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
+                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}"
+                            alt="Company Logo">
                     @else
                         @if ($invoice->customer->company)
                             <h2 class="header-logo"> {{ $invoice->customer->company->name }}</h2>
@@ -384,13 +384,16 @@
             @endif
         </div>
 
-        <div class="shipping-address-container shipping-address" @if ($billing_address !== '</br>') style="float:left;" @else style="display:block; float:left: padding-left: 0px;" @endif>
-            @if ($shipping_address)
-                <b>@lang('pdf_ship_to')</b> <br>
+        @if ($show_shipping_address)
+            <div class="shipping-address-container shipping-address"
+                @if ($billing_address !== '</br>') style="float:left;" @else style="display:block; float:left: padding-left: 0px;" @endif>
+                @if ($shipping_address)
+                    <b>@lang('pdf_ship_to')</b> <br>
 
-                {!! $shipping_address !!}
-            @endif
-        </div>
+                    {!! $shipping_address !!}
+                @endif
+            </div>
+        @endif
 
         <div style="position: relative; clear: both;">
             @include('app.pdf.invoice.partials.table')

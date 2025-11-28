@@ -421,6 +421,7 @@ class Estimate extends Model implements HasMedia
             'billing_address' => $this->getCustomerBillingAddress(),
             'notes' => $this->getNotes(),
             'taxes' => $taxes,
+            'show_shipping_address' => $this->shouldShowShippingAddress(),
         ]);
 
         $template = PdfTemplateUtils::findFormattedTemplate('estimate', $estimateTemplate, '');
@@ -469,6 +470,17 @@ class Estimate extends Model implements HasMedia
     public function getNotes()
     {
         return $this->getFormattedString($this->notes);
+    }
+
+    public function shouldShowShippingAddress()
+    {
+        $includeShippingAddress = $this->getCustomFieldValueBySlug('include_shipping_address');
+        
+        if ($includeShippingAddress === null) {
+            return false;
+        }
+        
+        return filter_var($includeShippingAddress, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getEmailAttachmentSetting()

@@ -376,7 +376,6 @@
         .pl-0 {
             padding-left: 0;
         }
-
     </style>
 
     @if (App::isLocale('th'))
@@ -390,7 +389,8 @@
             <tr>
                 <td width="60%" class="header-section-left">
                     @if ($logo)
-                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Company Logo">
+                        <img class="header-logo" style="height:50px" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}"
+                            alt="Company Logo">
                     @elseif ($invoice->customer->company)
                         <h1 class="header-logo" style="padding-top: 0px;">
                             {{ $invoice->customer->company->name }}
@@ -415,7 +415,7 @@
                 {!! $company_address !!}
             </div>
 
-            @if ($shipping_address !== '</br>')
+            @if ($show_shipping_address && $shipping_address !== '</br>')
                 <div class="shipping-address-container shipping-address">
                     @if ($shipping_address)
                         <b>@lang('pdf_ship_to')</b> <br>
@@ -424,8 +424,8 @@
                 </div>
             @endif
 
-
-            <div class="billing-address-container billing-address" @if ($shipping_address === '</br>') style="float:right; margin-right:30px;" @endif>
+            <div class="billing-address-container billing-address"
+                @if (!$show_shipping_address || $shipping_address === '</br>') style="float:right; margin-right:30px;" @endif>
                 @if ($billing_address)
                     <b>@lang('pdf_bill_to')</b> <br>
                     {!! $billing_address !!}
