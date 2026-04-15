@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App;
+use App\Facades\Hashids;
 use App\Facades\PDF;
 use App\Mail\SendInvoiceMail;
 use App\Services\SerialNumberFormatter;
@@ -18,7 +19,6 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Nwidart\Modules\Facades\Module;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Vinkla\Hashids\Facades\Hashids;
 
 class Invoice extends Model implements HasMedia
 {
@@ -57,6 +57,7 @@ class Invoice extends Model implements HasMedia
         'formattedCreatedAt',
         'formattedInvoiceDate',
         'formattedDueDate',
+        'formattedDueAmount',
         'invoicePdfUrl',
     ];
 
@@ -84,7 +85,7 @@ class Invoice extends Model implements HasMedia
 
     public function items(): HasMany
     {
-        return $this->hasMany(\App\Models\InvoiceItem::class);
+        return $this->hasMany(InvoiceItem::class);
     }
 
     public function taxes(): HasMany
@@ -188,6 +189,17 @@ class Invoice extends Model implements HasMedia
         $dateFormat = CompanySetting::getSetting('carbon_date_format', $this->company_id);
 
         return Carbon::parse($this->due_date)->translatedFormat($dateFormat);
+    }
+
+    public function getFormattedDueAmountAttribute($value)
+    {
+        $currency = $this->currency;
+
+        if (! $currency) {
+            $currency = Currency::findOrFail(CompanySetting::getSetting('currency', $this->company_id));
+        }
+
+        return format_money_pdf($this->due_amount, $currency);
     }
 
     public function getFormattedInvoiceDateAttribute($value)
@@ -464,7 +476,14 @@ class Invoice extends Model implements HasMedia
     {
         $data = $this->sendInvoiceData($data);
 
-        \Mail::to($data['to'])->send(new SendInvoiceMail($data));
+        $mail = \Mail::to($data['to']);
+        if (! empty($data['cc'])) {
+            $mail->cc($data['cc']);
+        }
+        if (! empty($data['bcc'])) {
+            $mail->bcc($data['bcc']);
+        }
+        $mail->send(new SendInvoiceMail($data));
 
         if ($this->status == Invoice::STATUS_DRAFT) {
             $this->status = Invoice::STATUS_SENT;

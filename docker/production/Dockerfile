@@ -1,11 +1,11 @@
-FROM --platform=$BUILDPLATFORM node:20 AS static_builder
+FROM --platform=$BUILDPLATFORM node:24 AS static_builder
     WORKDIR /var/www/html
     COPY . /var/www/html
     RUN yarn && yarn build
 
-FROM serversideup/php:8.3-fpm-nginx-alpine AS base
+FROM serversideup/php:8.4-fpm-nginx-alpine AS base
     USER root
-    RUN apk add --no-cache bash nano
+    RUN apk add --no-cache bash nano mariadb-client postgresql-client sqlite
     RUN install-php-extensions exif
     RUN install-php-extensions pgsql
     RUN install-php-extensions sqlite3
@@ -18,6 +18,10 @@ FROM serversideup/php:8.3-fpm-nginx-alpine AS base
     RUN install-php-extensions bcmath
     RUN install-php-extensions intl
     RUN install-php-extensions curl
+
+    # Copy entrypoint and inject script, and make sure they are executable
+    COPY --chmod=755 docker/production/inject.sh /inject.sh
+    COPY --chmod=755 docker/production/entrypoint.d/ /etc/entrypoint.d/
 
 FROM base AS production
     ENV AUTORUN_ENABLED=true
@@ -36,7 +40,3 @@ FROM base AS production
     COPY --from=static_builder --chown=www-data:www-data /var/www/html/public /var/www/html/public
     COPY --chown=www-data:www-data . /var/www/html
     RUN composer install --prefer-dist --no-dev --optimize-autoloader
-
-    # Copy entrypoint and inject script, and make sure they are executable
-    COPY --chmod=755 docker/production/inject.sh /inject.sh
-    COPY --chmod=755 docker/production/entrypoint.d/ /etc/entrypoint.d/

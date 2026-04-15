@@ -10,6 +10,7 @@ use App\Space\EnvironmentManager;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Mail;
 
 class MailConfigurationController extends Controller
@@ -164,11 +165,11 @@ class MailConfigurationController extends Controller
         switch ($driver) {
             case 'smtp':
                 $MailData = array_merge($MailData, [
-                    'mail_host' => $mailSettings['mail_host'] ?? '',
-                    'mail_port' => $mailSettings['mail_port'] ?? '',
-                    'mail_username' => $mailSettings['mail_username'] ?? '',
-                    'mail_password' => $mailSettings['mail_password'] ?? '',
-                    'mail_encryption' => $mailSettings['mail_encryption'] ?? 'none',
+                    'mail_host' => $mailSettings['mail_host'] ?? config('mail.mailers.smtp.host', ''),
+                    'mail_port' => $mailSettings['mail_port'] ?? config('mail.mailers.smtp.port', ''),
+                    'mail_username' => $mailSettings['mail_username'] ?? config('mail.mailers.smtp.username', ''),
+                    'mail_password' => $mailSettings['mail_password'] ?? config('mail.mailers.smtp.password', ''),
+                    'mail_encryption' => $mailSettings['mail_encryption'] ?? config('mail.mailers.smtp.encryption', 'none'),
                     'mail_scheme' => $mailSettings['mail_scheme'] ?? '',
                     'mail_url' => $mailSettings['mail_url'] ?? '',
                     'mail_timeout' => $mailSettings['mail_timeout'] ?? '',
@@ -235,7 +236,7 @@ class MailConfigurationController extends Controller
      * @return JsonResponse
      *
      * @throws AuthorizationException
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function testEmailConfig(Request $request)
     {

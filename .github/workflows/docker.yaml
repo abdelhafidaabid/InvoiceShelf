@@ -22,7 +22,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.3
+          php-version: 8.4
 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,8 +42,6 @@ jobs:
     strategy:
       matrix:
         php-version:
-          - 8.2
-          - 8.3
           - 8.4
     env:
       extensions: bcmath, curl, dom, gd, imagick, json, libxml, mbstring, pcntl, pdo, pdo_mysql, zip
@@ -63,10 +61,10 @@ jobs:
       - name: Install Composer dependencies
         uses: ramsey/composer-install@v2
 
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install
         run: npm install
@@ -93,7 +91,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.4
           extensions: ${{ env.extensions }}
           coverage: none
 
@@ -102,10 +100,10 @@ jobs:
         with:
           composer-options: --no-dev
 
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install
         run: npm install

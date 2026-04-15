@@ -1,11 +1,11 @@
-FROM --platform=$BUILDPLATFORM node AS static_builder
+FROM --platform=$BUILDPLATFORM node:24 AS static_builder
     WORKDIR /var/www/html
     COPY . /var/www/html
     RUN yarn && yarn build
 
-FROM serversideup/php:8-fpm-alpine AS base
+FROM serversideup/php:8.4-fpm-alpine AS base
     USER root
-    RUN apk add --no-cache sqlite
+    RUN apk add --no-cache bash nano mariadb-client postgresql-client sqlite
     RUN install-php-extensions exif
     RUN install-php-extensions pgsql
     RUN install-php-extensions sqlite3

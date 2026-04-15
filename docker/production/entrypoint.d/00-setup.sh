@@ -33,8 +33,15 @@ if [ "$DB_CONNECTION" = "sqlite" ] || [ -z "$DB_CONNECTION" ]; then
     chown www-data:www-data "$DB_DATABASE"
 fi
 
-echo "**** Setting up artisan permissions ****"
+echo "**** Setting up folder permissions ****"
 chmod +x artisan
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+
+if [ ! -L /var/www/html/public/storage ]; then
+    echo "**** Creating storage symlink (public/storage) ****"
+    ./artisan storage:link --force -n || true
+fi
 
 if ! grep -q "APP_KEY" /var/www/html/.env
 then
