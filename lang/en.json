@@ -1294,6 +1294,8 @@
       "company_currency_unchangeable": "Company currency cannot be changed",
       "invoice_use_time": "Use time in invoices",
       "invoice_use_time_description": "Enable this if you want to select exact invoice time.",
+      "swap_currency_symbol": "Swap Currency Symbol Position",
+      "swap_currency_symbol_description": "Toggle this if you want the currency symbol to appear after the amount.",
       "fiscal_years": {
         "january_december": "January - December",
         "february_january": "February - January",
@@ -1669,7 +1671,9 @@
   "mail_view_invoice": "View Invoice",
   "mail_viewed_invoice": ":name viewed this Invoice.",
   "mail_view_payment": "View Payment",
-  "notification_view_estimate": "[Notification] Estimate viewed",
-  "notification_view_invoice": "[Notification] Invoice viewed",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:"
+  "notification_view_estimate": "Wait! Estimate Was Viewed",
+  "notification_view_invoice": "Wait! Invoice Was Viewed",
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:",
+  "Morocco": "Morocco",
+  "swap_currency_symbol": "Swap Currency Symbol"
 }

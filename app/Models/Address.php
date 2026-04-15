@@ -18,7 +18,7 @@ class Address extends Model
 
     public function getCountryNameAttribute()
     {
-        $name = $this->country ? $this->country->name : null;
+        $name = $this->country ? __($this->country->name) : null;
 
         return $name;
     }

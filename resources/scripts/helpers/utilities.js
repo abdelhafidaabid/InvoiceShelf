@@ -66,7 +66,7 @@ export default {
       let combinedAmountText =
         negativeSign + thousandText + amountText + precisionText
 
-      return swap_currency_symbol
+      return swap_currency_symbol || ['MAD', 'FRF'].includes(currency.code)
         ? combinedAmountText + ' ' + moneySymbol
         : moneySymbol + ' ' + combinedAmountText
     } catch (e) {
