@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Zobrazit platbu",
   "notification_view_estimate": "[Notifikace] Zobrazený odhad",
   "notification_view_invoice": "[Notifikace] Zobrazená faktura",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Obdrželi jste novou fakturu od <b>{COMPANY_NAME}</b>.</br> Stáhněte si pomocí tlačítka níže:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Obdrželi jste novou fakturu od <b>{COMPANY_NAME}</b>.</br> Stáhněte si pomocí tlačítka níže:",
+  "pdf_estimate_to": "Estimate to,"
 }

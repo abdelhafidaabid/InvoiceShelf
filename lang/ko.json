@@ -1156,5 +1156,6 @@
   "pdf_bill_to": "청구서,",
   "pdf_ship_to": "배송지,",
   "pdf_received_from": "받은 사람 :",
-  "pdf_tax_label": "세"
+  "pdf_tax_label": "세",
+  "pdf_estimate_to": "Estimate to,"
 }

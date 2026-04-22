@@ -49,6 +49,17 @@
       />
     </BaseInputGroup>
 
+    <BaseInputGroup
+      :label="$t('settings.customization.estimates.estimate_pdf_color')"
+      class="mt-6 mb-4"
+    >
+      <input
+        v-model="formatSettings.estimate_pdf_color"
+        type="color"
+        class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+      />
+    </BaseInputGroup>
+
     <BaseButton
       :loading="isSaving"
       :disabled="isSaving"
@@ -102,6 +113,7 @@ const formatSettings = reactive({
   estimate_company_address_format: null,
   estimate_shipping_address_format: null,
   estimate_billing_address_format: null,
+  estimate_pdf_color: '#F8F9FA',
 })
 
 utils.mergeSettings(formatSettings, {

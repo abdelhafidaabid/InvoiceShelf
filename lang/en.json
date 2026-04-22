@@ -1044,6 +1044,7 @@
         "company_address_format": "Company Address Format",
         "shipping_address_format": "Shipping Address Format",
         "billing_address_format": "Billing Address Format",
+        "invoice_pdf_color": "Invoice PDF Table Color",
         "invoice_email_attachment": "Send invoices as attachments",
         "invoice_email_attachment_setting_description": "Enable this if you want to send invoices as email attachment. Please note that 'View Invoice' button in emails will not be displayed anymore when enabled.",
         "invoice_settings_updated": "Invoice Settings updated successfully",
@@ -1070,6 +1071,7 @@
         "company_address_format": "Company Address Format",
         "shipping_address_format": "Shipping Address Format",
         "billing_address_format": "Billing Address Format",
+        "estimate_pdf_color": "Estimate PDF Table Color",
         "estimate_email_attachment": "Send estimates as attachments",
         "estimate_email_attachment_setting_description": "Enable this if you want to send the estimates as an email attachment. Please note that 'View Estimate' button in emails will not be displayed anymore when enabled.",
         "estimate_settings_updated": "Estimate Settings updated successfully",
@@ -1675,5 +1677,6 @@
   "notification_view_invoice": "Wait! Invoice Was Viewed",
   "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:",
   "Morocco": "Morocco",
-  "swap_currency_symbol": "Swap Currency Symbol"
+  "swap_currency_symbol": "Swap Currency Symbol",
+  "pdf_estimate_to": "Estimate to,"
 }

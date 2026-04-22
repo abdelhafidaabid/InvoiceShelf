@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Ver Pagamento",
   "notification_view_estimate": "[Notificação] Orçamento visto",
   "notification_view_invoice": "[Notificação] Fatura vista",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Você recebeu uma nova fatura de <b>{COMPANY_NAME}</b>.</br> Baixe usando o botão abaixo:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Você recebeu uma nova fatura de <b>{COMPANY_NAME}</b>.</br> Baixe usando o botão abaixo:",
+  "pdf_estimate_to": "Estimate to,"
 }

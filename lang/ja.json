@@ -1667,5 +1667,6 @@
   "mail_view_payment": "支払いを表示",
   "notification_view_estimate": "[通知] 見積りを閲覧しました",
   "notification_view_invoice": "[通知] 請求書を閲覧しました",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "<b>{COMPANY_NAME}</b>から新しい請求書を受け取りました。</br>以下のボタンを使用してダウンロードしてください。"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "<b>{COMPANY_NAME}</b>から新しい請求書を受け取りました。</br>以下のボタンを使用してダウンロードしてください。",
+  "pdf_estimate_to": "Estimate to,"
 }

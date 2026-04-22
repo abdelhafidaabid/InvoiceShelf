@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Prikaz uplate",
   "notification_view_estimate": "[Obavijest] Ponuda pregledana",
   "notification_view_invoice": "[Obavijest] Račun pregledan",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:",
+  "pdf_estimate_to": "Estimate to,"
 }

@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Просмотр платежа",
   "notification_view_estimate": "[Notification] Оценка просмотрена",
   "notification_view_invoice": "[Notification] Счет просмотрен",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Вы получили новый счет от <b>{COMPANY_NAME}</b>.</br> Пожалуйста, загрузите, используя кнопку ниже:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Вы получили новый счет от <b>{COMPANY_NAME}</b>.</br> Пожалуйста, загрузите, используя кнопку ниже:",
+  "pdf_estimate_to": "Estimate to,"
 }

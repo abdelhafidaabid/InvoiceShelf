@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Bekijk betaling",
   "notification_view_estimate": "[Notification] Offerte bekeken",
   "notification_view_invoice": "[Notification] Factuur bekeken",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Je hebt een factuur ontvangen van <b>{COMPANY_NAME}</b>.</br> Download via de onderstaande knop:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Je hebt een factuur ontvangen van <b>{COMPANY_NAME}</b>.</br> Download via de onderstaande knop:",
+  "pdf_estimate_to": "Estimate to,"
 }

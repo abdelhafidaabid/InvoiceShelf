@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Ödemeyi Görüntüle",
   "notification_view_estimate": "[Bildirim] Teklif görüntülendi",
   "notification_view_invoice": "[Bildirim] Fatura görüntülendi",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "<b>{COMPANY_NAME}</b> firmasından yeni bir fatura aldınız.</br> Lütfen aşağıdaki butonu kullanarak indirin:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "<b>{COMPANY_NAME}</b> firmasından yeni bir fatura aldınız.</br> Lütfen aşağıdaki butonu kullanarak indirin:",
+  "pdf_estimate_to": "Estimate to,"
 }

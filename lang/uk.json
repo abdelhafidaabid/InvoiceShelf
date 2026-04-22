@@ -1667,5 +1667,6 @@
   "mail_view_payment": "Переглянути платіж",
   "notification_view_estimate": "[Повідомлення] Кошторис переглянуто",
   "notification_view_invoice": "[Повідомлення] Рахунок переглянуто",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Ви отримали новий інвойс від <b>{COMPANY_NAME}</b>.</br> Будь ласка, завантажте за допомогою кнопки нижче:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Ви отримали новий інвойс від <b>{COMPANY_NAME}</b>.</br> Будь ласка, завантажте за допомогою кнопки нижче:",
+  "pdf_estimate_to": "Estimate to,"
 }

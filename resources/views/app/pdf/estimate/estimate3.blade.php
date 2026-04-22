@@ -377,7 +377,7 @@
             <div class="customer-address-container">
                 <div class="billing-address-container billing-address">
                     @if ($billing_address)
-                        <b>@lang('pdf_bill_to')</b> <br>
+                        <b>@lang('pdf_estimate_to')</b> <br>
                         {!! $billing_address !!}
                     @endif
                 </div>

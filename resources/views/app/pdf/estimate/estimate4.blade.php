@@ -240,7 +240,7 @@
                 </td>
                 <td width="50%" style="vertical-align: middle;">
                     <div class="header-title-text">
-                        @lang('pdf_estimate_label') {{ $estimate->customer->company->name ?? '' }}
+                        @lang('pdf_estimate_label')
                     </div>
                 </td>
             </tr>
@@ -257,7 +257,7 @@
                 <div class="billing-address-container">
                     @if ($billing_address)
                         <div class="billing-address">
-                            <b>@lang('pdf_bill_to')</b> <br>
+                            <b>@lang('pdf_estimate_to')</b> <br>
                             {!! $billing_address !!}
                         </div>
                     @endif

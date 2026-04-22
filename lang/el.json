@@ -1667,5 +1667,6 @@
   "mail_view_payment": "View Payment",
   "notification_view_estimate": "[Notification] Estimate viewed",
   "notification_view_invoice": "[Notification] Invoice viewed",
-  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Λάβατε ένα νέο τιμολόγιο από <b>{COMPANY_NAME}</b>.</br> Κάντε λήψη χρησιμοποιώντας το παρακάτω κουμπί:"
+  "You have received a new invoice from <b>{COMPANY_NAME}</b>.</br> Please download using the button below:": "Λάβατε ένα νέο τιμολόγιο από <b>{COMPANY_NAME}</b>.</br> Κάντε λήψη χρησιμοποιώντας το παρακάτω κουμπί:",
+  "pdf_estimate_to": "Estimate to,"
 }
