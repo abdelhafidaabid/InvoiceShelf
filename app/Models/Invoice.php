@@ -701,9 +701,11 @@ class Invoice extends Model implements HasMedia
 
     public function getLazyExtraFields(): array
     {
+        $locale = CompanySetting::getSetting('language', $this->company_id) ?? App::getLocale();
+
         return [
-            '{INVOICE_TOTAL_WORD}' => fn () => AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale()),
-            '{INVOICE_TOTAL_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale())),
+            '{INVOICE_TOTAL_WORD}' => fn () => AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', $locale, $this->company_id),
+            '{INVOICE_TOTAL_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', $locale, $this->company_id)),
         ];
     }
 

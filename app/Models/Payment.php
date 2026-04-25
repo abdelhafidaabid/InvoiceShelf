@@ -465,9 +465,11 @@ class Payment extends Model implements HasMedia
 
     public function getLazyExtraFields(): array
     {
+        $locale = CompanySetting::getSetting('language', $this->company_id) ?? \App::getLocale();
+
         return [
-            '{PAYMENT_AMOUNT_WORD}' => fn () => AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', \App::getLocale()),
-            '{PAYMENT_AMOUNT_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', \App::getLocale())),
+            '{PAYMENT_AMOUNT_WORD}' => fn () => AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', $locale, $this->company_id),
+            '{PAYMENT_AMOUNT_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', $locale, $this->company_id)),
         ];
     }
 

@@ -17,7 +17,7 @@ class AmountToWords
      * @param  float|int  $amount  Already divided by 100 (i.e. decimal value)
      * @param  string  $locale  languageCode accepted by the API (e.g. 'en', 'fr')
      */
-    public static function convert(float|int $amount, string $currencyCode = 'EUR', string $locale = 'fr'): string
+    public static function convert(float|int $amount, string $currencyCode = 'EUR', string $locale = 'fr', ?int $companyId = null): string
     {
         // Round to 2 decimals to keep the cache key stable
         $normalizedAmount = round((float) $amount, 2);
@@ -30,11 +30,17 @@ class AmountToWords
 
         try {
             // Prefer per-company API provider from DB; fall back to .env / services.php
-            $provider = ApiProvider::query()
+            $providerQuery = ApiProvider::query()
                 ->where('driver', 'number2words')
-                ->where('active', true)
-                ->whereCompany()
-                ->first();
+                ->where('active', true);
+
+            if ($companyId) {
+                $providerQuery->where('company_id', $companyId);
+            } else {
+                $providerQuery->whereCompany();
+            }
+
+            $provider = $providerQuery->first();
 
             if ($provider) {
                 $key = $provider->key;

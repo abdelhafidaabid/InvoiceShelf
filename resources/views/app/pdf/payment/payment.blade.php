@@ -363,6 +363,14 @@
             <span class="amount">{{ str_replace('_', ' ', optional($payment->invoice)->paid_status ?? optional($payment->invoice)->status) }}</span>
         @endif
     </div>
+
+    @if($payment->getFormattedString('{PAYMENT_AMOUNT_WORD}'))
+        <div style="margin-top: 15px; padding: 0 30px; float: right; clear: both; min-width: 315px; margin-right: 30px; text-align: right;">
+            <div style="font-size: 12px; font-weight: bold; color: #55547A;">{{ $payment->getPdfLabel('payment_pdf_amount_in_words_label', 'pdf_amount_in_words') }} :</div>
+            <div style="font-size: 12px; color: #595959; text-transform: capitalize;">{{ $payment->getFormattedString('{PAYMENT_AMOUNT_WORD}') }}</div>
+        </div>
+    @endif
+
     <div class="notes">
         @if ($notes)
             <div class="notes-label">

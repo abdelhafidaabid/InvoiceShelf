@@ -235,7 +235,7 @@
         .page-number-container {
             position: absolute;
             bottom: 20px;
-            right: 30px;
+            right: -180px;
             font-size: 10px;
             color: #555;
             font-weight: bold;
