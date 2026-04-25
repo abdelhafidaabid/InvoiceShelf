@@ -14,7 +14,7 @@
         html {
             margin: 0px;
             padding: 0px;
-            margin-top: 50px;
+            margin: 50px 0px 50px 0px;
         }
 
         table {
@@ -30,7 +30,7 @@
         /* -- Header -- */
 
         .header-container {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 90px;
             left: 0px;
@@ -385,6 +385,27 @@
             padding-left: 0;
         }
 
+    
+        .pdf-footer {
+            position: fixed;
+            bottom: -50px;
+            left: 0px;
+            right: 0px;
+            height: 50px;
+        }
+
+        .page-number-container {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            font-size: 10px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .current-page:before {
+            content: counter(page);
+        }
     </style>
 
     @if (App::isLocale('th'))
@@ -408,6 +429,13 @@
             </tr>
         </table>
         <hr class="header-bottom-divider" />
+    </div>
+
+    
+    <div class="pdf-footer">
+        <div class="page-number-container">
+            <span class="current-page"></span> / DOMPDF_PAGE_COUNT_PLACEHOLDER
+        </div>
     </div>
 
     <div class="wrapper">
@@ -471,6 +499,13 @@
             @endif
         </div>
     </div>
+
+    
+    
+
 </body>
+
+
+
 
 </html>

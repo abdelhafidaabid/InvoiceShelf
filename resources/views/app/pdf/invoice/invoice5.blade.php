@@ -9,6 +9,11 @@
         $secondaryColor = $invoice->company->pdf_secondary_color ?? '#1a2332';
     @endphp
     <style type="text/css">
+        @page {
+            margin-top: 0.5in;
+            margin-bottom: 0.5in;
+        }
+
         /* -- Base & Fonts -- */
         body {
             font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
@@ -19,7 +24,7 @@
         }
 
         html {
-            margin: 0px;
+            margin: 180px 0px 160px 0px;
             padding: 0px;
         }
 
@@ -33,6 +38,22 @@
         .text-left { text-align: left; }
         .text-center { text-align: center; }
         .text-uppercase { text-transform: uppercase; }
+
+        .pdf-header {
+            position: fixed;
+            top: -180px;
+            left: 0px;
+            right: 0px;
+            height: 180px;
+        }
+
+        .pdf-footer {
+            position: fixed;
+            bottom: -160px;
+            left: 0px;
+            right: 0px;
+            height: 160px;
+        }
 
         /* -- Corner Shapes -- */
         .top-left-shape {
@@ -230,6 +251,9 @@
             text-decoration: none;
         }
 
+        
+        
+
         /* -- Helpers -- */
         .text-center { text-align: center }
         .text-left { text-align: left }
@@ -246,16 +270,27 @@
         .total-border-left { border: 1px solid {{ $mainColor }} !important; border-right: 0px !important; padding: 8px !important; }
         .total-border-right { border: 1px solid {{ $mainColor }} !important; border-left: 0px !important; padding: 8px !important; }
         .item-cell-table-hr { margin: 0 30px 0 30px; color: rgba(0, 0, 0, 0.2); border: 0.5px solid #EAF1FB; }
+
+        .page-number-container {
+            position: absolute;
+            bottom: 30px;
+            right: -260px !important;
+            font-size: 14px;
+            color: {{ $secondaryColor }} !important;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .current-page:before {
+            content: counter(page);
+        }
     </style>
 </head>
 <body>
-    <!-- Background Shapes -->
-    <div class="top-left-shape"></div>
-    <div class="bottom-right-shape"></div>
-    <div class="bottom-right-shape-gold"></div>
-
-    <div class="header-container">
-        <table width="100%">
+    <div class="pdf-header">
+        <div class="top-left-shape"></div>
+        <div class="header-container">
+            <table width="100%">
             <tr>
                 <td width="60%" style="vertical-align: top; padding-top: 10px;">
                     <div class="header-title-text text-uppercase">
@@ -273,9 +308,25 @@
                 </td>
             </tr>
         </table>
+        </div>
     </div>
 
-    <div class="content-wrapper">
+    <div class="pdf-footer">
+        <div class="page-number-container">
+            <span class="current-page"></span> / DOMPDF_PAGE_COUNT_PLACEHOLDER
+        </div>
+
+        <div class="bottom-right-shape"></div>
+        <div class="bottom-right-shape-gold"></div>
+        @if ($invoice->company)
+            <div class="footer-company-info">
+                {!! $company_address !!}
+            </div>
+        @endif
+    </div>
+
+    <main>
+        <div class="content-wrapper">
         <div class="client-section">
             <div class="client-label">{{ $invoice->getPdfLabel('invoice_pdf_bill_to_label', 'pdf_bill_to') }}</div>
             <div class="client-address">
@@ -313,13 +364,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Absolute Footer Information -->
-    @if ($invoice->company)
-        <div class="footer-company-info">
-            {!! $company_address !!}
-        </div>
-    @endif
-
+    </main>
 </body>
 </html>

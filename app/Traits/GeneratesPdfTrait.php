@@ -7,10 +7,37 @@ use App\Models\CompanySetting;
 use App\Models\FileDisk;
 use App\Support\PdfHtmlSanitizer;
 use Carbon\Carbon;
+use Dompdf\Canvas;
 use Illuminate\Support\Facades\App;
 
 trait GeneratesPdfTrait
 {
+    public function injectPageCount($pdf)
+    {
+        $dompdf = $pdf->getDompdf();
+        /** @var Canvas $canvas */
+        $canvas = $dompdf->getCanvas();
+        $cpdf = $canvas->get_cpdf();
+        $count = $canvas->get_page_count();
+
+        foreach ($cpdf->objects as &$o) {
+            if ($o['t'] === 'contents') {
+                // Replace plain ASCII
+                $o['c'] = str_replace('DOMPDF_PAGE_COUNT_PLACEHOLDER', $count, $o['c']);
+
+                // Replace UTF-16BE encoded (for Unicode fonts like DejaVu Sans)
+                $placeholderUtf16 = mb_convert_encoding('DOMPDF_PAGE_COUNT_PLACEHOLDER', 'UTF-16BE', 'UTF-8');
+                $countUtf16 = mb_convert_encoding($count, 'UTF-16BE', 'UTF-8');
+                $o['c'] = str_replace($placeholderUtf16, $countUtf16, $o['c']);
+
+                // Replace Hex encoded UTF-16BE (sometimes used by CID fonts)
+                $placeholderHex = strtoupper(bin2hex($placeholderUtf16));
+                $countHex = strtoupper(bin2hex($countUtf16));
+                $o['c'] = str_replace($placeholderHex, $countHex, $o['c']);
+            }
+        }
+    }
+
     public function getGeneratedPDFOrStream($collection_name)
     {
         $pdf = $this->getGeneratedPDF($collection_name);
@@ -26,8 +53,10 @@ trait GeneratesPdfTrait
         App::setLocale($locale);
 
         $pdf = $this->getPDFData();
+        $pdf->render();
+        $this->injectPageCount($pdf);
 
-        return response()->make($pdf->stream(), 200, [
+        return response()->make($pdf->output(), 200, [
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline; filename="'.$this[$collection_name.'_number'].'.pdf"',
         ]);
@@ -80,6 +109,8 @@ trait GeneratesPdfTrait
         App::setLocale($locale);
 
         $pdf = $this->getPDFData();
+        $pdf->render();
+        $this->injectPageCount($pdf);
 
         \Storage::disk('local')->put('temp/'.$collection_name.'/'.$this->id.'/temp.pdf', $pdf->output());
 
