@@ -6,6 +6,7 @@ use App\Facades\Hashids;
 use App\Jobs\GeneratePaymentPdfJob;
 use App\Mail\SendPaymentMail;
 use App\Services\SerialNumberFormatter;
+use App\Space\AmountToWords;
 use App\Traits\GeneratesPdfTrait;
 use App\Traits\HasCustomFieldsTrait;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -389,6 +390,7 @@ class Payment extends Model implements HasMedia
             'billing_address' => $this->getCustomerBillingAddress(),
             'notes' => $this->getNotes(),
             'logo' => $logo ?? null,
+            'stamp' => $company->stamp_path ?? null,
         ]);
 
         if (request()->has('preview')) {
@@ -440,6 +442,12 @@ class Payment extends Model implements HasMedia
     {
         $values = array_merge($this->getFieldsArray(), $this->getExtraFields());
 
+        foreach ($this->getLazyExtraFields() as $token => $resolver) {
+            if (str_contains($body, $token)) {
+                $values[$token] = $resolver();
+            }
+        }
+
         $body = strtr($body, $values);
 
         return preg_replace('/{(.*?)}/', '', $body);
@@ -452,6 +460,14 @@ class Payment extends Model implements HasMedia
             '{PAYMENT_MODE}' => $this->paymentMethod ? $this->paymentMethod->name : null,
             '{PAYMENT_NUMBER}' => $this->payment_number,
             '{PAYMENT_AMOUNT}' => format_money_pdf($this->amount, $this->customer->currency),
+        ];
+    }
+
+    public function getLazyExtraFields(): array
+    {
+        return [
+            '{PAYMENT_AMOUNT_WORD}' => fn () => AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', \App::getLocale()),
+            '{PAYMENT_AMOUNT_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->amount / 100, $this->customer->currency->code ?? 'EUR', \App::getLocale())),
         ];
     }
 

@@ -7,6 +7,7 @@ use App\Facades\Hashids;
 use App\Facades\PDF;
 use App\Mail\SendEstimateMail;
 use App\Services\SerialNumberFormatter;
+use App\Space\AmountToWords;
 use App\Space\PdfTemplateUtils;
 use App\Traits\GeneratesPdfTrait;
 use App\Traits\HasCustomFieldsTrait;
@@ -427,6 +428,7 @@ class Estimate extends Model implements HasMedia
             'shipping_address' => $this->getCustomerShippingAddress(),
             'billing_address' => $this->getCustomerBillingAddress(),
             'notes' => $this->getNotes(),
+            'stamp' => $company->stamp_path ?? null,
             'taxes' => $taxes,
             'show_shipping_address' => $this->shouldShowShippingAddress(),
         ]);
@@ -505,6 +507,12 @@ class Estimate extends Model implements HasMedia
     {
         $values = array_merge($this->getFieldsArray(), $this->getExtraFields());
 
+        foreach ($this->getLazyExtraFields() as $token => $resolver) {
+            if (str_contains($body, $token)) {
+                $values[$token] = $resolver();
+            }
+        }
+
         $body = strtr($body, $values);
 
         return preg_replace('/{(.*?)}/', '', $body);
@@ -517,6 +525,15 @@ class Estimate extends Model implements HasMedia
             '{ESTIMATE_EXPIRY_DATE}' => $this->formattedExpiryDate,
             '{ESTIMATE_NUMBER}' => $this->estimate_number,
             '{ESTIMATE_REF_NUMBER}' => $this->reference_number,
+            '{ESTIMATE_TOTAL}' => format_money_pdf($this->total, $this->customer->currency),
+        ];
+    }
+
+    public function getLazyExtraFields(): array
+    {
+        return [
+            '{ESTIMATE_TOTAL_WORD}' => fn () => AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale()),
+            '{ESTIMATE_TOTAL_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale())),
         ];
     }
 

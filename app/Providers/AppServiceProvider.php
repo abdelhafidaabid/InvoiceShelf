@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Bouncer\Scopes\DefaultScope;
+use App\Models\ApiProvider;
+use App\Policies\ApiProviderPolicy;
 use App\Policies\CompanyPolicy;
 use App\Policies\CustomerPolicy;
 use App\Policies\DashboardPolicy;
@@ -60,6 +62,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Gate::policy(Role::class, RolePolicy::class);
+        Gate::policy(ApiProvider::class, ApiProviderPolicy::class);
 
         View::addNamespace('pdf_templates', storage_path('app/templates/pdf'));
 

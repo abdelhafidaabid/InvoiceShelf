@@ -46,4 +46,11 @@ return [
         'region' => env('SES_REGION', 'us-east-1'),
     ],
 
+    'rapidapi' => [
+        'number2words' => [
+            'key' => env('RAPIDAPI_NUMBER2WORDS_KEY'),
+            'host' => env('RAPIDAPI_NUMBER2WORDS_HOST', 'number2words4.p.rapidapi.com'),
+        ],
+    ],
+
 ];

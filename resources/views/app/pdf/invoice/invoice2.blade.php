@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>@lang('pdf_invoice_label') - {{ $invoice->invoice_number }}</title>
+    <title>{{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }} - {{ $invoice->invoice_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         /* -- Base -- */
@@ -399,7 +399,7 @@
                 </td>
 
                 <td width="40%" class="header-section-right invoice-details-container">
-                    <h1>@lang('pdf_invoice_label')</h1>
+                    <h1>{{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }}</h1>
                     <h4>{{ $invoice->invoice_number }}</h4>
                     <h4>{{ $invoice->formattedInvoiceDate }}</h4>
                 </td>
@@ -418,7 +418,7 @@
             @if ($show_shipping_address && $shipping_address !== '<br />')
                 <div class="shipping-address-container shipping-address">
                     @if ($shipping_address)
-                        <b>@lang('pdf_ship_to')</b> <br>
+                        <b>{{ $invoice->getPdfLabel('invoice_pdf_ship_to_label', 'pdf_ship_to') }}</b> <br>
                         {!! $shipping_address !!}
                     @endif
                 </div>
@@ -427,7 +427,7 @@
             <div class="billing-address-container billing-address"
                 @if (!$show_shipping_address || $shipping_address === '<br />') style="float:right; margin-right:30px;" @endif>
                 @if ($billing_address)
-                    <b>@lang('pdf_bill_to')</b> <br>
+                    <b>{{ $invoice->getPdfLabel('invoice_pdf_bill_to_label', 'pdf_bill_to') }}</b> <br>
                     {!! $billing_address !!}
                 @endif
             </div>
@@ -440,7 +440,7 @@
         <div class="notes">
             @if ($notes)
                 <div class="notes-label">
-                    @lang('pdf_notes')
+                    {{ $invoice->getPdfLabel('invoice_pdf_notes_label', 'pdf_notes') }}
                 </div>
 
                 {!! $notes !!}

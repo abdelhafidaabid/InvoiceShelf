@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>@lang('pdf_estimate_label') - {{ $estimate->estimate_number }}</title>
+    <title>{{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }} - {{ $estimate->estimate_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style type="text/css">
@@ -377,7 +377,7 @@
             <div class="customer-address-container">
                 <div class="billing-address-container billing-address">
                     @if ($billing_address)
-                        <b>@lang('pdf_estimate_to')</b> <br>
+                        <b>{{ $estimate->getPdfLabel('estimate_pdf_bill_to_label', 'pdf_estimate_to') }}</b> <br>
                         {!! $billing_address !!}
                     @endif
                 </div>
@@ -386,7 +386,7 @@
                     <div
                         @if ($estimate->customer->billingaddress) class="shipping-address-container shipping-address" @else class="shipping-address-container--left shipping-address" @endif>
                         @if ($shipping_address)
-                            <b>@lang('pdf_ship_to')</b> <br>
+                            <b>{{ $estimate->getPdfLabel('estimate_pdf_ship_to_label', 'pdf_ship_to') }}</b> <br>
                             {!! $shipping_address !!}
                         @endif
                     </div>
@@ -398,15 +398,15 @@
             <div class="estimate-details-container">
                 <table>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_estimate_number')</td>
+                        <td class="attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_number_label', 'pdf_estimate_number') }}</td>
                         <td class="attribute-value"> &nbsp;{{ $estimate->estimate_number }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_estimate_date') </td>
+                        <td class="attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_date_label', 'pdf_estimate_date') }} </td>
                         <td class="attribute-value"> &nbsp;{{ $estimate->formattedEstimateDate }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_estimate_expire_date')</td>
+                        <td class="attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_expiry_date_label', 'pdf_estimate_expire_date') }}</td>
                         <td class="attribute-value"> &nbsp;{{ $estimate->formattedExpiryDate }}</td>
                     </tr>
                 </table>
@@ -418,7 +418,7 @@
             <div class="notes">
                 @if ($notes)
                     <div class="notes-label">
-                        @lang('pdf_notes')
+                        {{ $estimate->getPdfLabel('estimate_pdf_notes_label', 'pdf_notes') }}
                     </div>
                     {!! $notes !!}
                 @endif

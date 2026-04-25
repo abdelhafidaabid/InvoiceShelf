@@ -76,6 +76,20 @@ export const useCompanyStore = (useWindow = false) => {
         })
       },
 
+      updateCompanyStamp(data) {
+        return new Promise((resolve, reject) => {
+          http
+            .post('/api/v1/company/upload-stamp', data)
+            .then((response) => {
+              resolve(response)
+            })
+            .catch((err) => {
+              handleError(err)
+              reject(err)
+            })
+        })
+      },
+
       addNewCompany(data) {
         return new Promise((resolve, reject) => {
           http

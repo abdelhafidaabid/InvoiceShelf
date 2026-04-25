@@ -1,107 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@lang('pdf_estimate_label') - {{ $estimate->estimate_number }}</title>
+    <title>{{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }} - {{ $estimate->estimate_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     @php
-        $tableColor = \App\Models\CompanySetting::getSetting('estimate_pdf_color', $estimate->company_id) ?? '#a47833';
-        
-        // Simple Amount to Words conversion for French (simplified for common use)
-        function amountToWords($number) {
-            $hyphen      = '-';
-            $conjunction = ' et ';
-            $separator   = ', ';
-            $negative    = 'moins ';
-            $decimal     = ' point ';
-            $dictionary  = array(
-                0                   => 'zéro',
-                1                   => 'un',
-                2                   => 'deux',
-                3                   => 'trois',
-                4                   => 'quatre',
-                5                   => 'cinq',
-                6                   => 'six',
-                7                   => 'sept',
-                8                   => 'huit',
-                9                   => 'neuf',
-                10                  => 'dix',
-                11                  => 'onze',
-                12                  => 'douze',
-                13                  => 'treize',
-                14                  => 'quatorze',
-                15                  => 'quinze',
-                16                  => 'seize',
-                17                  => 'dix-sept',
-                18                  => 'dix-huit',
-                19                  => 'dix-neuf',
-                20                  => 'vingt',
-                30                  => 'trente',
-                40                  => 'quarante',
-                50                  => 'cinquante',
-                60                  => 'soixante',
-                70                  => 'soixante-dix',
-                80                  => 'quatre-vingt',
-                90                  => 'quatre-vingt-dix',
-                100                 => 'cent',
-                1000                => 'mille',
-                1000000             => 'million',
-                1000000000          => 'milliard'
-            );
-            
-            if (!is_numeric($number)) return false;
-            
-            if ($number < 0) return $negative . amountToWords(abs($number));
-            
-            $string = null;
-            $fraction = null;
-            
-            if (strpos($number, '.') !== false) {
-                list($number, $fraction) = explode('.', $number);
-            }
-            
-            switch (true) {
-                case $number < 21:
-                    $string = $dictionary[$number];
-                    break;
-                case $number < 100:
-                    $tens   = ((int) ($number / 10)) * 10;
-                    $units  = $number % 10;
-                    $string = $dictionary[$tens];
-                    if ($units) {
-                        $string .= ($units == 1 && $tens != 80 ? $conjunction : $hyphen) . $dictionary[$units];
-                    }
-                    break;
-                case $number < 1000:
-                    $hundreds  = $number / 100;
-                    $remainder = $number % 100;
-                    $string = ($hundreds >= 2 ? $dictionary[$hundreds] . ' ' : '') . $dictionary[100];
-                    if ($remainder) {
-                        $string .= ' ' . amountToWords($remainder);
-                    }
-                    break;
-                default:
-                    $baseUnit = pow(1000, floor(log($number, 1000)));
-                    $numBaseUnits = (int) ($number / $baseUnit);
-                    $remainder = $number % $baseUnit;
-                    $string = amountToWords($numBaseUnits) . ' ' . $dictionary[$baseUnit];
-                    if ($numBaseUnits > 1 && $baseUnit != 1000) $string .= 's';
-                    if ($remainder) {
-                        $string .= ' ' . amountToWords($remainder);
-                    }
-                    break;
-            }
-            
-            return $string;
-        }
-        
-        $totalInWords = amountToWords($estimate->total);
+        $mainColor = $estimate->company->pdf_main_color ?? '#a47833';
+        $secondaryColor = $estimate->company->pdf_secondary_color ?? '#1a2332';
     @endphp
     <style type="text/css">
         /* -- Base & Fonts -- */
         body {
             font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
-            color: #222222;
+            color: #000000;
             font-size: 11px;
             margin: 0;
             padding: 0;
@@ -131,8 +42,8 @@
             width: 0;
             height: 0;
             border-style: solid;
-            border-width: 150px 400px 0 0;
-            border-color: #1a2332 transparent transparent transparent;
+            border-width: 120px 300px 0 0;
+            border-color: {{ $secondaryColor }} transparent transparent transparent;
             z-index: -1;
         }
         .bottom-right-shape {
@@ -142,196 +53,234 @@
             width: 0;
             height: 0;
             border-style: solid;
-            border-width: 0 0 150px 250px;
-            border-color: transparent transparent {{ $tableColor }} transparent;
+            border-width: 0 0 120px 200px;
+            border-color: transparent transparent {{ $secondaryColor }} transparent;
+            z-index: -1;
+        }
+        .bottom-right-shape-gold {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 0 100px 180px;
+            border-color: transparent transparent {{ $mainColor }} transparent;
             z-index: -1;
         }
 
         /* -- Header -- */
         .header-container {
             width: 100%;
-            padding: 40px 40px 0 40px;
+            padding: 40px 60px 0 60px;
             position: relative;
         }
         .header-logo {
-            height: 100px;
+            height: 110px;
             width: auto;
-            max-width: 250px;
         }
         .header-title-text {
-            font-size: 48px;
+            font-size: 42px;
             color: #000;
             font-weight: bold;
         }
         .header-year {
             font-size: 18px;
-            vertical-align: super;
-            margin-left: 2px;
+            margin-left: 5px;
         }
         .header-metadata {
-            margin-top: 10px;
-            font-size: 13px;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #000;
+        }
+        .metadata-label {
+            color: {{ $mainColor }};
             font-weight: bold;
-            color: #333;
+        }
+        .metadata-value {
+            font-weight: bold;
         }
 
         /* -- Content Wrapper -- */
         .content-wrapper {
             display: block;
-            padding: 0 40px;
-            margin-top: 20px;
+            padding: 0 60px;
+            margin-top: 30px;
         }
 
         /* -- Client Info -- */
         .client-section {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
         .client-label {
-            color: {{ $tableColor }};
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-        }
-        .client-name {
+            color: {{ $mainColor }};
             font-size: 16px;
             font-weight: bold;
-            margin-bottom: 5px;
             text-transform: uppercase;
+            margin-bottom: 8px;
         }
-        .client-details {
-            font-size: 11px;
-            color: #333;
-            line-height: 1.4;
-            font-weight: bold;
+        .client-address {
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         /* -- Items Table -- */
         .items-table {
             width: 100%;
-            margin-top: 20px;
-            border: 1px solid #000;
+            border-top: 1px solid {{ $mainColor }};
+            border-bottom: 1px solid {{ $mainColor }};
         }
         tr.item-table-heading-row {
-            background-color: {{ $tableColor }} !important;
+            background-color: {{ $mainColor }} !important;
         }
         tr.item-table-heading-row th {
             padding: 10px;
             color: #FFF !important;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: bold;
             text-transform: uppercase;
-            border: 1px solid #000;
+            border: none;
         }
         tr.item-row td {
-            padding: 10px;
+            padding: 12px 10px;
             font-size: 11px;
-            border: 1px solid #000;
+            border-bottom: 0.5px solid {{ $mainColor }};
             color: #000;
-            font-weight: bold;
         }
         .item-description {
             color: #333;
             font-size: 10px;
-            font-weight: normal;
             display: block;
-            margin-top: 4px;
+            margin-top: 5px;
+            line-height: 1.4;
         }
 
         /* -- Totals -- */
         .total-display-container {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .total-display-table {
             float: right;
-            width: 35%;
+            width: auto;
+            min-width: 280px;
+            margin-top: 20px;
             border-collapse: collapse;
-        }
-        .total-display-table td {
-            border: 1px solid #000;
-            padding: 8px 10px;
-            font-weight: bold;
         }
         .total-table-attribute-label {
             text-align: left;
-            text-transform: uppercase;
-            font-size: 10px;
-            background-color: #f9f9f9;
+            padding: 10px 15px;
+            border-bottom: 1px solid #EEE;
+            font-size: 12px;
+            color: #555;
+            font-weight: bold;
         }
         .total-table-attribute-value {
             text-align: right;
-            font-size: 11px;
-            color: #000 !important;
-        }
-        
-        /* Specific override for total row */
-        .total-display-table tr:last-child td {
-            background-color: #f0f0f0;
-        }
-        .total-display-table tr:last-child .total-table-attribute-value {
-            color: {{ $tableColor }} !important;
-            font-size: 13px;
-        }
-
-        /* -- Amount in Words -- */
-        .amount-in-words-section {
-            margin-top: 40px;
-            font-size: 11px;
+            padding: 10px 15px;
+            border-bottom: 1px solid #EEE;
+            font-size: 12px;
             font-weight: bold;
-            clear: both;
         }
-        .amount-words {
-            font-style: italic;
-            text-transform: capitalize;
+        .total-row {
+            background-color: #F9FAFB;
         }
-
-        /* -- Notes -- */
+        .total-row td {
+            border-top: 1px solid {{ $mainColor }};
+            border-bottom: 1px solid {{ $mainColor }};
+            padding: 12px 15px;
+        }
         .notes {
             margin-top: 30px;
+            page-break-inside: avoid;
         }
         .notes-label {
             font-weight: bold;
+            text-transform: uppercase;
+            color: {{ $mainColor }};
             margin-bottom: 5px;
-            text-decoration: underline;
+            font-size: 11px;
+        }
+        .notes-content {
+            font-size: 10px;
+            line-height: 1.4;
         }
 
         /* -- Footer -- */
         .footer-company-info {
             position: absolute;
             bottom: 40px;
-            left: 40px;
-            right: 40px;
+            left: 60px;
+            right: 60px;
             font-size: 10px;
             color: #000;
             line-height: 1.6;
         }
-        .footer-company-name {
+        .footer-row {
+            margin-bottom: 2px;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 5px;
         }
+        .footer-label {
+            font-weight: bold;
+        }
+        .footer-link {
+            color: #004d99;
+            text-decoration: none;
+        }
+        .notes {
+            margin-top: 30px;
+            page-break-inside: avoid;
+        }
+        .notes-label {
+            font-weight: bold;
+            text-transform: uppercase;
+            color: {{ $mainColor }};
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+        .notes-content {
+            font-size: 10px;
+            line-height: 1.4;
+        }
+        /* -- Helpers -- */
+        .text-center { text-align: center }
+        .text-left { text-align: left }
+        .text-right { text-align: right }
+        .border-0 { border: none !important; }
+        .py-2 { padding-top: 2px; padding-bottom: 2px; }
+        .py-3 { padding: 3px 0; }
+        .py-8 { padding-top: 8px; padding-bottom: 8px; }
+        .pr-20 { padding-right: 20px; }
+        .pr-10 { padding-right: 10px; }
+        .pl-20 { padding-left: 20px; }
+        .pl-10 { padding-left: 10px; }
+        .pl-0 { padding-left: 0; }
+        .total-border-left { border: 1px solid {{ $mainColor }} !important; border-right: 0px !important; padding: 8px !important; }
+        .total-border-right { border: 1px solid {{ $mainColor }} !important; border-left: 0px !important; padding: 8px !important; }
+        .item-cell-table-hr { margin: 0 30px 0 30px; color: rgba(0, 0, 0, 0.2); border: 0.5px solid #EAF1FB; }
     </style>
 </head>
 <body>
     <!-- Background Shapes -->
     <div class="top-left-shape"></div>
     <div class="bottom-right-shape"></div>
+    <div class="bottom-right-shape-gold"></div>
 
     <div class="header-container">
         <table width="100%">
             <tr>
-                <td width="60%" style="vertical-align: top; padding-top: 20px;">
-                    <div class="header-title-text">
-                        @lang('pdf_estimate_label')<span class="header-year">{{ date('Y') }}</span>
+                <td width="60%" style="vertical-align: top; padding-top: 10px;">
+                    <div class="header-title-text text-uppercase">
+                        {{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }} <span class="header-year">{{ date('Y') }}</span>
                     </div>
                     <div class="header-metadata">
-                        {{ $estimate->estimate_number }} <br>
-                        {{ $estimate->formattedEstimateDate }}
+                        <span class="metadata-label">{{ $estimate->getPdfLabel('estimate_pdf_number_label', 'pdf_estimate_number') }} :</span> <span class="metadata-value">{{ $estimate->estimate_number }}</span> <br>
+                        <span class="metadata-label">{{ $estimate->getPdfLabel('estimate_pdf_date_label', 'pdf_estimate_date') }} :</span> <span class="metadata-value">{{ $estimate->formattedEstimateDate }}</span>
                     </div>
                 </td>
-                <td width="40%" class="text-right" style="vertical-align: top;">
+                <td width="40%" class="text-left" style="vertical-align: top;">
                     @if ($logo)
                         <img class="header-logo" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Logo">
                     @endif
@@ -342,51 +291,57 @@
 
     <div class="content-wrapper">
         <div class="client-section">
-            <div class="client-label">@lang('pdf_estimate_to')</div>
-            <div class="client-name">{{ $estimate->customer->name }}</div>
-            @if($estimate->customer->company_name)
-                <div class="client-name">{{ $estimate->customer->company_name }}</div>
-            @endif
-            <div class="client-details">
-                {!! str_replace('<br>', ' - ', $billing_address) !!}
+            <div class="client-label">{{ $estimate->getPdfLabel('estimate_pdf_bill_to_label', 'pdf_estimate_to') }}</div>
+            <div class="client-address">
+                {!! $billing_address !!}
             </div>
+            
+            @if($show_shipping_address && $shipping_address)
+                <div class="client-label" style="margin-top: 20px;">{{ $estimate->getPdfLabel('estimate_pdf_ship_to_label', 'pdf_ship_to') }}</div>
+                <div class="client-address">
+                    {!! $shipping_address !!}
+                </div>
+            @endif
         </div>
 
         <div style="clear: both;"></div>
 
         <!-- Table Partial Render -->
         <div style="position: relative; clear: both;">
-            @include('app.pdf.estimate.partials.table')
+            @include('app.pdf.estimate.partials.table5')
         </div>
 
         <div style="clear: both;"></div>
 
-        <!-- Amount in Words -->
-        <div class="amount-in-words-section">
-            Arrêté le présent devis à la somme de : <br>
-            <span class="amount-words">{{ $totalInWords }} {{ $estimate->customer->currency->code }}</span>
-        </div>
-
         <!-- Notes / Payment terms -->
-        <div class="notes">
-            @if ($notes)
-                <div class="notes-label">
-                    @lang('pdf_notes')
-                </div>
-                <div style="font-size: 10px; color: #444;">
-                    {!! $notes !!}
-                </div>
-            @endif
+        @if ($notes)
+            <div class="notes">
+                <div class="notes-label">{{ $estimate->getPdfLabel('estimate_pdf_notes_label', 'pdf_notes') }} :</div>
+                <div class="notes-content">{!! $notes !!}</div>
+            </div>
+        @endif
+
+        <!-- Signature Area -->
+        <div style="margin-top: 40px; text-align: right; padding-right: 60px;">
+            <div style="display: inline-block; text-align: center;">
+                <div style="font-weight: bold; margin-bottom: 10px;">{{ $estimate->getPdfLabel('estimate_pdf_signature_stamp_label', 'pdf_signature_stamp') }}</div>
+                @if($stamp)
+                    <div style="margin-bottom: 5px;">
+                        <img src="{{ \App\Space\ImageUtils::toBase64Src($stamp) }}" style="max-height: 100px; max-width: 200px;">
+                    </div>
+                @else
+                    <div style="margin-bottom: 50px;"></div>
+                @endif
+                <div style="border-bottom: 1px solid #ccc; width: 200px;"></div>
+            </div>
         </div>
     </div>
 
     <!-- Absolute Footer Information -->
     @if ($estimate->company)
         <div class="footer-company-info">
-            <div class="footer-company-name">{{ $estimate->company->name }}</div>
             {!! $company_address !!}
         </div>
     @endif
-
 </body>
 </html>

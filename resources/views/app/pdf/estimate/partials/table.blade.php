@@ -1,16 +1,16 @@
 <table width="100%" class="items-table" cellspacing="0" border="0">
     <tr class="item-table-heading-row">
         <th width="2%" class="pr-20 text-right item-table-heading">#</th>
-        <th width="40%" class="pl-0 text-left item-table-heading">@lang('pdf_items_label')</th>
+        <th width="40%" class="pl-0 text-left item-table-heading">{{ $estimate->getPdfLabel('estimate_pdf_items_label', 'pdf_items_label') }}</th>
         @foreach($customFields as $field)
             <th class="text-right item-table-heading">{{ $field->label }}</th>
         @endforeach
-        <th class="pr-20 text-right item-table-heading">@lang('pdf_quantity_label')</th>
-        <th class="pr-20 text-right item-table-heading">@lang('pdf_price_label')</th>
+        <th class="pr-20 text-right item-table-heading">{{ $estimate->getPdfLabel('estimate_pdf_quantity_label', 'pdf_quantity_label') }}</th>
+        <th class="pr-20 text-right item-table-heading">{{ $estimate->getPdfLabel('estimate_pdf_price_label', 'pdf_price_label') }}</th>
         @if($estimate->discount_per_item === 'YES')
-        <th class="pl-10 text-right item-table-heading">@lang('pdf_discount_label')</th>
+        <th class="pl-10 text-right item-table-heading">{{ $estimate->getPdfLabel('estimate_pdf_discount_label', 'pdf_discount_label') }}</th>
         @endif
-        <th class="text-right item-table-heading">@lang('pdf_amount_label')</th>
+        <th class="text-right item-table-heading">{{ $estimate->getPdfLabel('estimate_pdf_amount_label', 'pdf_amount_label') }}</th>
     </tr>
     @php
         $index = 1
@@ -75,7 +75,7 @@
 <div class="total-display-container">
     <table width="100%" cellspacing="0px" border="0" class="total-display-table @if(count($estimate->items) > 12) page-break @endif">
         <tr>
-            <td class="border-0 total-table-attribute-label">@lang('pdf_subtotal')</td>
+            <td class="border-0 total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_subtotal_label', 'pdf_subtotal') }}</td>
             <td class="border-0 item-cell total-table-attribute-value ">{!! format_money_pdf($estimate->sub_total, $estimate->customer->currency) !!}</td>
         </tr>
 
@@ -84,10 +84,10 @@
                 <tr>
                     <td class="pl-10 border-0 total-table-attribute-label">
                         @if($estimate->discount_type === 'fixed')
-                            @lang('pdf_discount_label')
+                            {{ $estimate->getPdfLabel('estimate_pdf_discount_label', 'pdf_discount_label') }}
                         @endif
                         @if($estimate->discount_type === 'percentage')
-                            @lang('pdf_discount_label') ({{$estimate->discount}}%)
+                            {{ $estimate->getPdfLabel('estimate_pdf_discount_label', 'pdf_discount_label') }} ({{$estimate->discount}}%)
                         @endif
                     </td>
                     <td class="text-right border-0 item-cell total-table-attribute-value">
@@ -105,7 +105,7 @@
         @if ($estimate->tax_included)
         <tr>
             <td class="border-0 total-table-attribute-label">
-                @lang('pdf_net_total')
+                {{ $estimate->getPdfLabel('estimate_pdf_net_total_label', 'pdf_net_total') }}
             </td>
             <td class="py-2 border-0 item-cell total-table-attribute-value">
                 {!! format_money_pdf($estimate->sub_total - $estimate->discount - $estimate->tax, $estimate->customer->currency) !!}
@@ -150,7 +150,7 @@
             <td class="py-3"></td>
         </tr>
         <tr>
-            <td class="border-0 total-border-left total-table-attribute-label">@lang('pdf_total')</td>
+            <td class="border-0 total-border-left total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_total_label', 'pdf_total') }}</td>
             <td class="py-8 border-0 total-border-right item-cell total-table-attribute-value" style="color: #5851D8">
                 {!! format_money_pdf($estimate->total, $estimate->customer->currency)!!}
             </td>

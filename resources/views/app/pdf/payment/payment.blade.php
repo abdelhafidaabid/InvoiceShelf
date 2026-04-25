@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>@lang('pdf_payment_label') - {{ $payment->payment_number }}</title>
+    <title>{{ $payment->getPdfLabel('payment_pdf_label', 'pdf_payment_label') }} - {{ $payment->payment_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style type="text/css">
@@ -306,7 +306,7 @@
     <hr style="border: 0.620315px solid #E8E8E8;">
 
     <p class="content-heading">
-        <span>@lang('pdf_payment_receipt_label')</span>
+        <span>{{ $payment->getPdfLabel('payment_pdf_label', 'pdf_payment_receipt_label') }}</span>
     </p>
 
     <div class="content-wrapper">
@@ -314,7 +314,7 @@
             <div class="customer-address-container">
                 <div class="billing-address-container billing-address">
                     @if ($billing_address)
-                        @lang('pdf_received_from')
+                        {{ $payment->getPdfLabel('payment_pdf_received_from_label', 'pdf_received_from') }}
                         {!! $billing_address !!}
                     @endif
                 </div>
@@ -326,21 +326,21 @@
             <div class="payment-details-container">
                 <table width="100%">
                     <tr>
-                        <td class="attribute-label">@lang('pdf_payment_date')</td>
+                        <td class="attribute-label">{{ $payment->getPdfLabel('payment_pdf_date_label', 'pdf_payment_date') }}</td>
                         <td class="attribute-value"> &nbsp;{{ $payment->formattedPaymentDate }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_payment_number')</td>
+                        <td class="attribute-label">{{ $payment->getPdfLabel('payment_pdf_number_label', 'pdf_payment_number') }}</td>
                         <td class="attribute-value"> &nbsp;{{ $payment->payment_number }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_payment_mode')</td>
+                        <td class="attribute-label">{{ $payment->getPdfLabel('payment_pdf_mode_label', 'pdf_payment_mode') }}</td>
                         <td class="attribute-value">
                             &nbsp;{{ $payment->paymentMethod ? $payment->paymentMethod->name : '-' }}</td>
                     </tr>
                     @if ($payment->invoice && $payment->invoice->invoice_number)
                         <tr>
-                            <td class="attribute-label">@lang('pdf_invoice_label')</td>
+                            <td class="attribute-label">{{ $payment->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }}</td>
                             <td class="attribute-value"> &nbsp;{{ $payment->invoice->invoice_number }}</td>
                         </tr>
                         <tr>
@@ -354,19 +354,19 @@
         <div style="clear: both;"></div>
     </div>
     <div class="total-display-box">
-        <p class="total-display-label">@lang('pdf_payment_amount_received_label')</p>
+        <p class="total-display-label">{{ $payment->getPdfLabel('payment_pdf_amount_label', 'pdf_payment_amount_received_label') }}</p>
         <span class="amount">{!! format_money_pdf($payment->amount, $payment->customer->currency) !!}</span>
         @if ($payment->invoice && $payment->invoice->invoice_number)
-            <br><p class="total-display-label">Balance Due</p>
+            <br><p class="total-display-label">{{ $payment->getPdfLabel('payment_pdf_balance_due_label', 'pdf_balance_due') }}</p>
             <span class="amount">{!! $payment->invoice->formattedDueAmount !!}</span>
-            <br><p class="total-display-label">Invoice Status</p>
+            <br><p class="total-display-label">{{ $payment->getPdfLabel('payment_pdf_invoice_status_label', 'pdf_invoice_status') }}</p>
             <span class="amount">{{ str_replace('_', ' ', optional($payment->invoice)->paid_status ?? optional($payment->invoice)->status) }}</span>
         @endif
     </div>
     <div class="notes">
         @if ($notes)
             <div class="notes-label">
-                @lang('pdf_notes')
+                {{ $payment->getPdfLabel('payment_pdf_notes_label', 'pdf_notes') }}
             </div>
             {!! $notes !!}
         @endif

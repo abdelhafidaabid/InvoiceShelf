@@ -76,4 +76,10 @@ export default {
   // settings
   MANAGE_NOTE: 'manage-all-notes',
   VIEW_NOTE: 'view-all-notes',
+
+  // API Providers
+  VIEW_API_PROVIDER: 'view-api-provider',
+  CREATE_API_PROVIDER: 'create-api-provider',
+  EDIT_API_PROVIDER: 'edit-api-provider',
+  DELETE_API_PROVIDER: 'delete-api-provider',
 }

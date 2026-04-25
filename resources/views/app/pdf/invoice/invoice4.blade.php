@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@lang('pdf_invoice_label') - {{ $invoice->invoice_number }}</title>
+    <title>{{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }} - {{ $invoice->invoice_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style type="text/css">
@@ -240,7 +240,7 @@
                 </td>
                 <td width="50%" style="vertical-align: middle;">
                     <div class="header-title-text">
-                        @lang('pdf_invoice_label') {{ $invoice->customer->company->name }}
+                        {{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }} {{ $invoice->customer->company->name }}
                     </div>
                 </td>
             </tr>
@@ -257,7 +257,7 @@
                 <div class="billing-address-container">
                     @if ($billing_address)
                         <div class="billing-address">
-                            <b>@lang('pdf_bill_to')</b> <br>
+                            <b>{{ $invoice->getPdfLabel('invoice_pdf_bill_to_label', 'pdf_bill_to') }}</b> <br>
                             {!! $billing_address !!}
                         </div>
                     @endif
@@ -267,7 +267,7 @@
                     <div class="shipping-address-container">
                         @if ($shipping_address)
                             <div class="shipping-address">
-                                <b>@lang('pdf_ship_to')</b> <br>
+                                <b>{{ $invoice->getPdfLabel('invoice_pdf_ship_to_label', 'pdf_ship_to') }}</b> <br>
                                 {!! $shipping_address !!}
                             </div>
                         @endif
@@ -279,15 +279,15 @@
             <div class="invoice-details-container">
                 <table>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_invoice_number')</td>
+                        <td class="attribute-label">{{ $invoice->getPdfLabel('invoice_pdf_number_label', 'pdf_invoice_number') }}</td>
                         <td class="attribute-value">{{ $invoice->invoice_number }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_invoice_date')</td>
+                        <td class="attribute-label">{{ $invoice->getPdfLabel('invoice_pdf_date_label', 'pdf_invoice_date') }}</td>
                         <td class="attribute-value">{{ $invoice->formattedInvoiceDate }}</td>
                     </tr>
                     <tr>
-                        <td class="attribute-label">@lang('pdf_invoice_due_date')</td>
+                        <td class="attribute-label">{{ $invoice->getPdfLabel('invoice_pdf_due_date_label', 'pdf_invoice_due_date') }}</td>
                         <td class="attribute-value">{{ $invoice->formattedDueDate }}</td>
                     </tr>
                 </table>
@@ -308,7 +308,7 @@
         <div class="notes">
             @if ($notes)
                 <div class="notes-label">
-                    @lang('pdf_notes')
+                    {{ $invoice->getPdfLabel('invoice_pdf_notes_label', 'pdf_notes') }}
                 </div>
                 <div>
                     {!! $notes !!}

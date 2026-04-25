@@ -31,6 +31,12 @@ class CompanyRequest extends FormRequest
             'tax_id' => [
                 'nullable',
             ],
+            'pdf_main_color' => [
+                'nullable',
+            ],
+            'pdf_secondary_color' => [
+                'nullable',
+            ],
             'slug' => [
                 'nullable',
             ],
@@ -48,6 +54,8 @@ class CompanyRequest extends FormRequest
                 'slug',
                 'vat_id',
                 'tax_id',
+                'pdf_main_color',
+                'pdf_secondary_color',
             ])
             ->toArray();
     }

@@ -173,11 +173,21 @@ trait GeneratesPdfTrait
     {
         $values = array_merge($this->getFieldsArray(), $this->getExtraFields());
 
+        // Resolve lazy/expensive fields (e.g. API-backed _WORD tokens) only when
+        // their token is actually present in the format string.
+        if (method_exists($this, 'getLazyExtraFields')) {
+            foreach ($this->getLazyExtraFields() as $token => $resolver) {
+                if (str_contains($format, $token)) {
+                    $values[$token] = $resolver();
+                }
+            }
+        }
+
         $str = nl2br(strtr($format, $values));
 
         $str = preg_replace('/{(.*?)}/', '', $str);
 
-        $str = preg_replace("/<[^\/>]*>([\s]?)*<\/[^>]*>/", '', $str);
+        $str = preg_replace("/<[^\/\>]*>([\s]?)*<\/[^>]*>/", '', $str);
 
         $str = str_replace('<p>', '', $str);
 
@@ -188,5 +198,12 @@ trait GeneratesPdfTrait
         // custom field values. Notes also pass through this method, so they
         // get the same treatment without needing a separate wrapper.
         return PdfHtmlSanitizer::sanitize($str);
+    }
+
+    public function getPdfLabel($settingKey, $translationKey)
+    {
+        $setting = CompanySetting::getSetting($settingKey, $this->company_id);
+
+        return $setting ?: __($translationKey);
     }
 }

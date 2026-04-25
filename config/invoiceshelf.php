@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApiProvider;
 use App\Models\Customer;
 use App\Models\CustomField;
 use App\Models\Estimate;
@@ -199,6 +200,16 @@ return [
             'owner_only' => false,
             'ability' => 'view-exchange-rate-provider',
             'model' => ExchangeRateProvider::class,
+        ],
+        [
+            'title' => 'settings.menu_title.apis_providers',
+            'group' => '',
+            'name' => 'API Provider',
+            'link' => '/admin/settings/apis-providers',
+            'icon' => 'ServerIcon',
+            'owner_only' => true,
+            'ability' => '',
+            'model' => ApiProvider::class,
         ],
         [
             'title' => 'settings.menu_title.notifications',
@@ -522,6 +533,10 @@ return [
         ['key' => 'settings.exchange_rate.currency_freak', 'value' => 'currency_freak'],
         ['key' => 'settings.exchange_rate.currency_layer', 'value' => 'currency_layer'],
         ['key' => 'settings.exchange_rate.open_exchange_rate', 'value' => 'open_exchange_rate'],
+    ],
+
+    'api_drivers' => [
+        ['key' => 'Number to Words (RapidAPI)', 'value' => 'number2words'],
     ],
 
     /*

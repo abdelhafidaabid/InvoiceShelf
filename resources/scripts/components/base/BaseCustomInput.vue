@@ -197,6 +197,9 @@ async function getFields() {
           { label: 'Due Date', value: 'INVOICE_DUE_DATE' },
           { label: 'Number', value: 'INVOICE_NUMBER' },
           { label: 'Ref Number', value: 'INVOICE_REF_NUMBER' },
+          { label: 'Total', value: 'INVOICE_TOTAL' },
+          { label: 'Total in Words', value: 'INVOICE_TOTAL_WORD' },
+          { label: 'Total in Words (Uppercase)', value: 'INVOICE_TOTAL_WORD_UP' },
           ...invoiceFields.value.map((i) => ({
             label: i.label,
             value: i.slug,
@@ -213,6 +216,9 @@ async function getFields() {
           { label: 'Expiry Date', value: 'ESTIMATE_EXPIRY_DATE' },
           { label: 'Number', value: 'ESTIMATE_NUMBER' },
           { label: 'Ref Number', value: 'ESTIMATE_REF_NUMBER' },
+          { label: 'Total', value: 'ESTIMATE_TOTAL' },
+          { label: 'Total in Words', value: 'ESTIMATE_TOTAL_WORD' },
+          { label: 'Total in Words (Uppercase)', value: 'ESTIMATE_TOTAL_WORD_UP' },
           ...estimateFields.value.map((i) => ({
             label: i.label,
             value: i.slug,
@@ -229,6 +235,8 @@ async function getFields() {
           { label: 'Number', value: 'PAYMENT_NUMBER' },
           { label: 'Mode', value: 'PAYMENT_MODE' },
           { label: 'Amount', value: 'PAYMENT_AMOUNT' },
+          { label: 'Amount in Words', value: 'PAYMENT_AMOUNT_WORD' },
+          { label: 'Amount in Words (Uppercase)', value: 'PAYMENT_AMOUNT_WORD_UP' },
           ...paymentFields.value.map((i) => ({
             label: i.label,
             value: i.slug,

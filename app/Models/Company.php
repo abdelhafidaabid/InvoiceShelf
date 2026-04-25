@@ -22,11 +22,16 @@ class Company extends Model implements HasMedia
         'id',
     ];
 
+    protected $casts = [
+        'pdf_main_color' => 'string',
+        'pdf_secondary_color' => 'string',
+    ];
+
     public const COMPANY_LEVEL = 'company_level';
 
     public const CUSTOMER_LEVEL = 'customer_level';
 
-    protected $appends = ['logo', 'logo_path'];
+    protected $appends = ['logo', 'logo_path', 'stamp', 'stamp_path'];
 
     public function getRolesAttribute()
     {
@@ -57,6 +62,34 @@ class Company extends Model implements HasMedia
 
         if ($logo) {
             return $logo->getFullUrl();
+        }
+
+        return null;
+    }
+
+    public function getStampPathAttribute()
+    {
+        $stamp = $this->getMedia('stamp')->first();
+
+        $isSystem = FileDisk::whereSetAsDefault(true)->first()->isSystem();
+
+        if ($stamp) {
+            if ($isSystem) {
+                return $stamp->getPath();
+            } else {
+                return $stamp->getFullUrl();
+            }
+        }
+
+        return null;
+    }
+
+    public function getStampAttribute()
+    {
+        $stamp = $this->getMedia('stamp')->first();
+
+        if ($stamp) {
+            return $stamp->getFullUrl();
         }
 
         return null;

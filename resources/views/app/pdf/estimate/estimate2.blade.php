@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>@lang('pdf_estimate_label') - {{ $estimate->estimate_number }}</title>
+    <title>{{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }} - {{ $estimate->estimate_number }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         /* -- Base -- */
@@ -430,7 +430,7 @@
                     </td>
                 @endif
                 <td width="40%" class="header-section-right estimate-details-container">
-                    <h1>@lang('pdf_estimate_label')</h1>
+                    <h1>{{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }}</h1>
                     <h4>{{ $estimate->estimate_number }}</h4>
                     <h4>{{ $estimate->formattedEstimateDate }}</h4>
                 </td>
@@ -447,7 +447,7 @@
             @if ($show_shipping_address && $shipping_address !== '<br />')
                 <div class="shipping-address-container shipping-address">
                     @if ($shipping_address)
-                        <b>@lang('pdf_ship_to')</b> <br>
+                        <b>{{ $estimate->getPdfLabel('estimate_pdf_ship_to_label', 'pdf_ship_to') }}</b> <br>
                         {!! $shipping_address !!}
                     @endif
                 </div>
@@ -455,7 +455,7 @@
 
             <div class="billing-address-container billing-address" @if (!$show_shipping_address || $shipping_address === '<br />') style="float:right; margin-right:30px;" @endif>
                 @if ($billing_address)
-                    <b>@lang('pdf_estimate_to')</b> <br>
+                    <b>{{ $estimate->getPdfLabel('estimate_pdf_bill_to_label', 'pdf_estimate_to') }}</b> <br>
                     {!! $billing_address !!}
                 @endif
             </div>
@@ -467,7 +467,7 @@
         <div class="notes">
             @if ($notes)
                 <div class="notes-label">
-                    @lang('pdf_notes')
+                    {{ $estimate->getPdfLabel('estimate_pdf_notes_label', 'pdf_notes') }}
                 </div>
                 {!! $notes !!}
             @endif

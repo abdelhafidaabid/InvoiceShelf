@@ -69,6 +69,7 @@ use App\Http\Controllers\V1\Admin\RecurringInvoice\RecurringInvoiceController;
 use App\Http\Controllers\V1\Admin\RecurringInvoice\RecurringInvoiceFrequencyController;
 use App\Http\Controllers\V1\Admin\Role\AbilitiesController;
 use App\Http\Controllers\V1\Admin\Role\RolesController;
+use App\Http\Controllers\V1\Admin\Settings\ApiProviderController;
 use App\Http\Controllers\V1\Admin\Settings\CompanyController;
 use App\Http\Controllers\V1\Admin\Settings\CompanyCurrencyCheckTransactionsController;
 use App\Http\Controllers\V1\Admin\Settings\DiskController;
@@ -360,6 +361,8 @@ Route::prefix('/v1')->group(function () {
             Route::get('/supported-currencies', GetSupportedCurrenciesController::class);
 
             Route::apiResource('exchange-rate-providers', ExchangeRateProviderController::class);
+            Route::post('api-providers/test', [ApiProviderController::class, 'test']);
+            Route::apiResource('api-providers', ApiProviderController::class);
 
             // Settings
             // ----------------------------------
@@ -377,6 +380,7 @@ Route::prefix('/v1')->group(function () {
             Route::put('/company', [CompanyController::class, 'updateCompany']);
 
             Route::post('/company/upload-logo', [CompanyController::class, 'uploadCompanyLogo']);
+            Route::post('/company/upload-stamp', [CompanyController::class, 'uploadCompanyStamp']);
 
             Route::get('/company/settings', GetCompanySettingsController::class);
 

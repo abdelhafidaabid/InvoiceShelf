@@ -58,6 +58,8 @@ const RolesSettings = () =>
   import('@/scripts/admin/views/settings/RolesSettings.vue')
 const PDFGenerationSettings = () =>
   import('@/scripts/admin/views/settings/PDFGenerationSetting.vue')
+const ApiProviderSetting = () =>
+  import('@/scripts/admin/views/settings/ApiProviderSetting.vue')
 
 // Items
 const ItemsIndex = () => import('@/scripts/admin/views/items/Index.vue')
@@ -334,6 +336,12 @@ export default [
             name: 'pdf.generation',
             meta: { isOwner: true },
             component: PDFGenerationSettings,
+          },
+          {
+            path: 'apis-providers',
+            name: 'apis.providers',
+            meta: { isOwner: true },
+            component: ApiProviderSetting,
           },
         ],
       },

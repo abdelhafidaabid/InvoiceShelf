@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AvatarRequest;
 use App\Http\Requests\CompanyLogoRequest;
 use App\Http\Requests\CompanyRequest;
+use App\Http\Requests\CompanyStampRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Resources\CompanyResource;
 use App\Http\Resources\UserResource;
@@ -83,6 +84,39 @@ class CompanyController extends Controller
                 $company->addMediaFromBase64($data->data)
                     ->usingFileName($data->name)
                     ->toMediaCollection('logo');
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * Upload the company stamp to storage.
+     *
+     * @return JsonResponse
+     */
+    public function uploadCompanyStamp(CompanyStampRequest $request)
+    {
+        $company = Company::find($request->header('company'));
+
+        $this->authorize('manage company', $company);
+
+        $data = json_decode($request->company_stamp);
+
+        if (isset($request->is_company_stamp_removed) && (bool) $request->is_company_stamp_removed) {
+            $company->clearMediaCollection('stamp');
+        }
+        if ($data) {
+            $company = Company::find($request->header('company'));
+
+            if ($company) {
+                $company->clearMediaCollection('stamp');
+
+                $company->addMediaFromBase64($data->data)
+                    ->usingFileName($data->name)
+                    ->toMediaCollection('stamp');
             }
         }
 

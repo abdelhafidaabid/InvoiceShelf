@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\ApiProvider;
 use App\Models\Customer;
 use App\Models\CustomField;
 use App\Models\Estimate;
@@ -427,6 +428,40 @@ return [
             'model' => Note::class,
             'depends_on' => [
                 'view-all-notes',
+            ],
+        ],
+        // API Provider
+        [
+            'name' => 'view api provider',
+            'ability' => 'view-api-provider',
+            'model' => ApiProvider::class,
+            'owner_only' => false,
+        ],
+        [
+            'name' => 'create api provider',
+            'ability' => 'create-api-provider',
+            'model' => ApiProvider::class,
+            'owner_only' => false,
+            'depends_on' => [
+                'view-api-provider',
+            ],
+        ],
+        [
+            'name' => 'edit api provider',
+            'ability' => 'edit-api-provider',
+            'model' => ApiProvider::class,
+            'owner_only' => false,
+            'depends_on' => [
+                'view-api-provider',
+            ],
+        ],
+        [
+            'name' => 'delete api provider',
+            'ability' => 'delete-api-provider',
+            'model' => ApiProvider::class,
+            'owner_only' => false,
+            'depends_on' => [
+                'view-api-provider',
             ],
         ],
     ],

@@ -1,19 +1,19 @@
 <table width="100%" class="items-table" cellspacing="0" border="0">
     <tr class="item-table-heading-row">
         <th width="2%" class="pr-20 text-right item-table-heading">#</th>
-        <th width="40%" class="pl-0 text-left item-table-heading">@lang('pdf_items_label')</th>
+        <th width="40%" class="pl-0 text-left item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_items_label', 'pdf_items_label') }}</th>
         @foreach($customFields as $field)
             <th class="text-right item-table-heading">{{ $field->label }}</th>
         @endforeach
-        <th class="pr-20 text-right item-table-heading">@lang('pdf_quantity_label')</th>
-        <th class="pr-20 text-right item-table-heading">@lang('pdf_price_label')</th>
+        <th class="pr-20 text-right item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_quantity_label', 'pdf_quantity_label') }}</th>
+        <th class="pr-20 text-right item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_price_label', 'pdf_price_label') }}</th>
         @if($invoice->discount_per_item === 'YES')
-        <th class="pl-10 text-right item-table-heading">@lang('pdf_discount_label')</th>
+        <th class="pl-10 text-right item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_discount_label', 'pdf_discount_label') }}</th>
         @endif
         @if($invoice->tax_per_item === 'YES')
-        <th class="pl-10 text-right item-table-heading">@lang('pdf_tax_label')</th>
+        <th class="pl-10 text-right item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_tax_label', 'pdf_tax_label') }}</th>
         @endif
-        <th class="text-right item-table-heading">@lang('pdf_amount_label')</th>
+        <th class="text-right item-table-heading">{{ $invoice->getPdfLabel('invoice_pdf_amount_label', 'pdf_amount_label') }}</th>
     </tr>
     @php
         $index = 1
@@ -92,7 +92,7 @@
 <div class="total-display-container">
     <table width="100%" cellspacing="0px" border="0" class="total-display-table @if(count($invoice->items) > 12) page-break @endif">
         <tr>
-            <td class="border-0 total-table-attribute-label">@lang('pdf_subtotal')</td>
+            <td class="border-0 total-table-attribute-label">{{ $invoice->getPdfLabel('invoice_pdf_subtotal_label', 'pdf_subtotal') }}</td>
             <td class="py-2 border-0 item-cell total-table-attribute-value">
                 {!! format_money_pdf($invoice->sub_total, $invoice->customer->currency) !!}
             </td>
@@ -103,10 +103,10 @@
                 <tr>
                     <td class="border-0 total-table-attribute-label">
                         @if($invoice->discount_type === 'fixed')
-                            @lang('pdf_discount_label')
+                            {{ $invoice->getPdfLabel('invoice_pdf_discount_label', 'pdf_discount_label') }}
                         @endif
                         @if($invoice->discount_type === 'percentage')
-                            @lang('pdf_discount_label') ({{$invoice->discount}}%)
+                            {{ $invoice->getPdfLabel('invoice_pdf_discount_label', 'pdf_discount_label') }} ({{$invoice->discount}}%)
                         @endif
                     </td>
                     <td class="py-2 border-0 item-cell total-table-attribute-value" >
@@ -124,7 +124,7 @@
         @if ($invoice->tax_included)
         <tr>
             <td class="border-0 total-table-attribute-label">
-                @lang('pdf_net_total')
+                {{ $invoice->getPdfLabel('invoice_pdf_net_total_label', 'pdf_net_total') }}
             </td>
             <td class="py-2 border-0 item-cell total-table-attribute-value">
                 {!! format_money_pdf($invoice->sub_total - $invoice->discount - $invoice->tax, $invoice->customer->currency) !!}
@@ -170,7 +170,7 @@
         </tr>
         <tr>
             <td class="border-0 total-border-left total-table-attribute-label">
-                @lang('pdf_total')
+                {{ $invoice->getPdfLabel('invoice_pdf_total_label', 'pdf_total') }}
             </td>
             <td
                 class="py-8 border-0 total-border-right item-cell total-table-attribute-value"
@@ -183,7 +183,7 @@
         @if($invoice->paid_status === App\Models\Invoice::STATUS_PARTIALLY_PAID || $invoice->paid_status === App\Models\Invoice::STATUS_PAID)
             <tr>
                 <td class="border-0 total-border-left total-table-attribute-label">
-                    @lang('pdf_amount_paid')
+                    {{ $invoice->getPdfLabel('invoice_pdf_amount_paid_label', 'pdf_amount_paid') }}
                 </td>
                 <td class="py-8 border-0 total-border-right item-cell total-table-attribute-value">
                     {!! format_money_pdf($invoice->total - $invoice->due_amount, $invoice->customer->currency)!!}
@@ -191,7 +191,7 @@
             </tr>
             <tr>
                 <td class="border-0 total-border-left total-table-attribute-label">
-                    @lang('pdf_amount_due')
+                    {{ $invoice->getPdfLabel('invoice_pdf_amount_due_label', 'pdf_amount_due') }}
                 </td>
                 <td class="py-8 border-0 total-border-right item-cell total-table-attribute-value" style="color: #5851D8">
                     {!! format_money_pdf($invoice->due_amount, $invoice->customer->currency)!!}

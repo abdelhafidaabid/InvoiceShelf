@@ -7,6 +7,7 @@ use App\Facades\Hashids;
 use App\Facades\PDF;
 use App\Mail\SendInvoiceMail;
 use App\Services\SerialNumberFormatter;
+use App\Space\AmountToWords;
 use App\Space\PdfTemplateUtils;
 use App\Traits\GeneratesPdfTrait;
 use App\Traits\HasCustomFieldsTrait;
@@ -597,6 +598,7 @@ class Invoice extends Model implements HasMedia
             'billing_address' => $this->getCustomerBillingAddress(),
             'notes' => $this->getNotes(),
             'logo' => $logo ?? null,
+            'stamp' => $company->stamp_path ?? null,
             'taxes' => $taxes,
             'show_shipping_address' => $this->shouldShowShippingAddress(),
         ]);
@@ -663,17 +665,23 @@ class Invoice extends Model implements HasMedia
     public function shouldShowShippingAddress()
     {
         $includeShippingAddress = $this->getCustomFieldValueBySlug('include_shipping_address');
-        
+
         if ($includeShippingAddress === null) {
             return false;
         }
-        
+
         return filter_var($includeShippingAddress, FILTER_VALIDATE_BOOLEAN);
     }
 
     public function getEmailString($body)
     {
         $values = array_merge($this->getFieldsArray(), $this->getExtraFields());
+
+        foreach ($this->getLazyExtraFields() as $token => $resolver) {
+            if (str_contains($body, $token)) {
+                $values[$token] = $resolver();
+            }
+        }
 
         $body = strtr($body, $values);
 
@@ -687,6 +695,15 @@ class Invoice extends Model implements HasMedia
             '{INVOICE_DUE_DATE}' => $this->formattedDueDate,
             '{INVOICE_NUMBER}' => $this->invoice_number,
             '{INVOICE_REF_NUMBER}' => $this->reference_number,
+            '{INVOICE_TOTAL}' => format_money_pdf($this->total, $this->customer->currency),
+        ];
+    }
+
+    public function getLazyExtraFields(): array
+    {
+        return [
+            '{INVOICE_TOTAL_WORD}' => fn () => AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale()),
+            '{INVOICE_TOTAL_WORD_UP}' => fn () => mb_strtoupper(AmountToWords::convert($this->total / 100, $this->customer->currency->code ?? 'EUR', App::getLocale())),
         ];
     }
 

@@ -13,6 +13,15 @@
             @remove="onFileInputRemove"
           />
         </BaseInputGroup>
+
+        <BaseInputGroup :label="$t('settings.company_info.company_stamp')">
+          <BaseFileUploader
+            v-model="previewStamp"
+            base64
+            @change="onStampInputChange"
+            @remove="onStampInputRemove"
+          />
+        </BaseInputGroup>
       </BaseInputGrid>
 
       <BaseInputGrid class="mt-5">
@@ -93,7 +102,24 @@
           <BaseInputGroup :label="$t('settings.company_info.vat_id')">
             <BaseInput v-model="companyForm.vat_id" type="text" />
           </BaseInputGroup>
+
+          
         </div>
+        <BaseInputGroup :label="$t('settings.company_info.pdf_main_color')">
+            <input
+              v-model="companyForm.pdf_main_color"
+              type="color"
+              class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.pdf_secondary_color')">
+            <input
+              v-model="companyForm.pdf_secondary_color"
+              type="color"
+              class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+          </BaseInputGroup>
       </BaseInputGrid>
 
       <BaseButton
@@ -154,8 +180,11 @@ let isSaving = ref(false)
 const companyForm = reactive({
   name: null,
   logo: null,
+  stamp: null,
   tax_id: null,
   vat_id: null,
+  pdf_main_color: '#000000',
+  pdf_secondary_color: '#000000',
   address: {
     address_street_1: '',
     address_street_2: '',
@@ -177,9 +206,20 @@ let logoFileBlob = ref(null)
 let logoFileName = ref(null)
 const isCompanyLogoRemoved = ref(false)
 
+let previewStamp = ref([])
+let stampFileBlob = ref(null)
+let stampFileName = ref(null)
+const isCompanyStampRemoved = ref(false)
+
 if (companyForm.logo) {
   previewLogo.value.push({
     image: companyForm.logo,
+  })
+}
+
+if (companyForm.stamp) {
+  previewStamp.value.push({
+    image: companyForm.stamp,
   })
 }
 
@@ -217,6 +257,16 @@ function onFileInputRemove() {
   isCompanyLogoRemoved.value = true
 }
 
+function onStampInputChange(fileName, file, fileCount, fileList) {
+  stampFileName.value = fileList.name
+  stampFileBlob.value = file
+}
+
+function onStampInputRemove() {
+  stampFileBlob.value = null
+  isCompanyStampRemoved.value = true
+}
+
 async function updateCompanyData() {
   v$.value.$touch()
 
@@ -246,6 +296,25 @@ async function updateCompanyData() {
       await companyStore.updateCompanyLogo(logoData)
       logoFileBlob.value = null
       isCompanyLogoRemoved.value = false
+    }
+
+    if (stampFileBlob.value || isCompanyStampRemoved.value) {
+      let stampData = new FormData()
+
+      if (stampFileBlob.value) {
+        stampData.append(
+          'company_stamp',
+          JSON.stringify({
+            name: stampFileName.value,
+            data: stampFileBlob.value,
+          }),
+        )
+      }
+      stampData.append('is_company_stamp_removed', isCompanyStampRemoved.value)
+
+      await companyStore.updateCompanyStamp(stampData)
+      stampFileBlob.value = null
+      isCompanyStampRemoved.value = false
     }
 
     isSaving.value = false
