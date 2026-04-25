@@ -298,15 +298,6 @@
 
         <div style="clear: both;"></div>
 
-        @if($notes)
-            <div class="notes">
-                <div class="notes-label">{{ $invoice->getPdfLabel('invoice_pdf_notes_label', 'pdf_notes') }} :</div>
-                <div class="notes-content">{!! $notes !!}</div>
-            </div>
-        @endif
-
-
-
         <!-- Signature Area -->
         <div style="margin-top: 40px; text-align: right; padding-right: 60px;">
             <div style="display: inline-block; text-align: center;">
