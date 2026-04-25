@@ -379,6 +379,8 @@
             {!! $notes !!}
         @endif
     </div>
+
+    @include('app.pdf.partials.signature', ['model' => $payment, 'type' => 'payment', 'stamp' => $stamp])
 </body>
 
 </html>

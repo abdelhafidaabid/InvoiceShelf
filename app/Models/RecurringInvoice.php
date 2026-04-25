@@ -340,6 +340,7 @@ class RecurringInvoice extends Model
         $newInvoice['discount'] = $this->discount;
         $newInvoice['discount_type'] = $this->discount_type;
         $newInvoice['notes'] = $this->notes;
+        $newInvoice['show_signature'] = $this->show_signature;
         $newInvoice['exchange_rate'] = $this->exchange_rate;
         $newInvoice['sales_tax_type'] = $this->sales_tax_type;
         $newInvoice['sales_tax_address_type'] = $this->sales_tax_address_type;

@@ -34,6 +34,7 @@ class PaymentResource extends JsonResource
             'formatted_created_at' => $this->formattedCreatedAt,
             'formatted_payment_date' => $this->formattedPaymentDate,
             'payment_pdf_url' => $this->paymentPdfUrl,
+            'show_signature' => $this->show_signature,
             'customer' => $this->when($this->customer()->exists(), function () {
                 return new CustomerResource($this->customer);
             }),

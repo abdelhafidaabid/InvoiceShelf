@@ -11,5 +11,6 @@ export default {
   notes: '',
   payment_method_id: '',
   customFields: [],
-  fields: []
+  fields: [],
+  show_signature: true
 }

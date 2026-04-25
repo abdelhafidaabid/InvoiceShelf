@@ -500,6 +500,8 @@
                 {!! $notes !!}
             @endif
         </div>
+
+        @include('app.pdf.partials.signature', ['model' => $estimate, 'type' => 'estimate', 'stamp' => $stamp])
     </div>
 
     

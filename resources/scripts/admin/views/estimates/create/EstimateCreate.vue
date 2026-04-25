@@ -121,6 +121,14 @@
               store-prop="newEstimate"
               :is-mark-as-default="isMarkAsDefault"
             />
+
+            <!-- Estimate Signature Toggle -->
+            <div class="mt-4">
+              <BaseSwitch
+                v-model="estimateStore.newEstimate.show_signature"
+                :label-right="$t('general.show_signature_and_stamp')"
+              />
+            </div>
           </div>
 
           <Total

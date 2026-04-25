@@ -139,7 +139,8 @@
       "the_list_is_empty": "The list is empty",
       "no_results_found": "No results found"
     },
-    "copy_to_clipboard": "Copy to Clipboard"
+    "copy_to_clipboard": "Copy to Clipboard",
+    "show_signature_and_stamp": "Show Signature & Cachet"
   },
   "dashboard": {
     "select_year": "Select year",

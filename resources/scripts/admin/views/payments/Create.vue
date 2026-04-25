@@ -227,6 +227,14 @@
           />
         </div>
 
+        <!-- Payment Signature Toggle -->
+        <div class="mt-6">
+          <BaseSwitch
+            v-model="paymentStore.currentPayment.show_signature"
+            :label-right="$t('general.show_signature_and_stamp')"
+          />
+        </div>
+
         <BaseButton
           :loading="isSaving"
           :content-loading="isLoadingContent"

@@ -48,6 +48,10 @@ class PaymentRequest extends FormRequest
             'notes' => [
                 'nullable',
             ],
+            'show_signature' => [
+                'boolean',
+                'nullable',
+            ],
         ];
 
         if ($this->isMethod('PUT')) {

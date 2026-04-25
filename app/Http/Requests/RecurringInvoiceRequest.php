@@ -82,6 +82,10 @@ class RecurringInvoiceRequest extends FormRequest
             'items.*' => [
                 'required',
             ],
+            'show_signature' => [
+                'boolean',
+                'nullable',
+            ],
         ];
 
         $customer = Customer::find($this->customer_id);

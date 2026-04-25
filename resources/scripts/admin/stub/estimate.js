@@ -36,5 +36,6 @@ export default function () {
     fields: [],
     selectedNote: null,
     selectedCurrency: '',
+    show_signature: true,
   }
 }

@@ -120,6 +120,14 @@
               component-name="InvoiceTemplate"
               :is-mark-as-default="isMarkAsDefault"
             />
+
+            <!-- Invoice Signature Toggle -->
+            <div class="mt-4">
+              <BaseSwitch
+                v-model="invoiceStore.newInvoice.show_signature"
+                :label-right="$t('general.show_signature_and_stamp')"
+              />
+            </div>
           </div>
 
           <InvoiceTotal

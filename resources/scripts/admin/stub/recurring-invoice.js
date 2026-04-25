@@ -15,6 +15,7 @@ export default function () {
     total: 0,
     tax: 0,
     notes: '',
+    show_signature: true,
     discount_type: 'fixed',
     discount_val: 0,
     discount: 0,

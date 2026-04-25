@@ -118,6 +118,14 @@
               :store="recurringInvoiceStore"
               store-prop="newRecurringInvoice"
             />
+
+            <!-- Recurring Invoice Signature Toggle -->
+            <div class="mt-4">
+              <BaseSwitch
+                v-model="recurringInvoiceStore.newRecurringInvoice.show_signature"
+                :label-right="$t('general.show_signature_and_stamp')"
+              />
+            </div>
           </div>
 
           <!-- Invoice Total Card -->

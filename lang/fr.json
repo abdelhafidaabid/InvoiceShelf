@@ -139,7 +139,8 @@
       "the_list_is_empty": "La liste est vide",
       "no_results_found": "Aucun résultat"
     },
-    "copy_to_clipboard": "Copier dans le presse-papier"
+    "copy_to_clipboard": "Copier dans le presse-papier",
+    "show_signature_and_stamp": "Afficher la signature et le cachet"
   },
   "dashboard": {
     "select_year": "Sélectionnez l'année",

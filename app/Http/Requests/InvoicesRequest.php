@@ -63,6 +63,10 @@ class InvoicesRequest extends FormRequest
             'template_name' => [
                 'required',
             ],
+            'show_signature' => [
+                'boolean',
+                'nullable',
+            ],
             'items' => [
                 'required',
                 'array',
