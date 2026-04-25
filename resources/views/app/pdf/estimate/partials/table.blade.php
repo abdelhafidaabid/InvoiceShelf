@@ -157,10 +157,3 @@
         </tr>
     </table>
 </div>
-
-@if($estimate->getFormattedString('{ESTIMATE_TOTAL_WORD}'))
-    <div style="margin-top: 15px; padding: 0 30px;">
-        <div style="font-size: 12px; font-weight: bold; color: #55547A;">{{ $estimate->getPdfLabel('estimate_pdf_amount_in_words_label', 'pdf_amount_in_words') }} :</div>
-        <div style="font-size: 12px; color: #595959; text-transform: capitalize;">{{ $estimate->getFormattedString('{ESTIMATE_TOTAL_WORD}') }}</div>
-    </div>
-@endif

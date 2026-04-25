@@ -69,13 +69,6 @@
                         <div class="notes-content">{!! $notes !!}</div>
                     </div>
                 @endif
-
-                @if(isset($amount_in_words) && $amount_in_words)
-                    <div style="margin-top: 15px;">
-                        <div class="notes-label">{{ $estimate->getPdfLabel('estimate_pdf_amount_in_words_label', 'pdf_amount_in_words') }} :</div>
-                        <div class="notes-content" style="text-transform: capitalize;">{{ $amount_in_words }}</div>
-                    </div>
-                @endif
             </td>
             <td width="40%" style="vertical-align: top;">
                 <table width="100%" cellspacing="0px" border="0" class="total-display-table @if(count($estimate->items) > 12) page-break @endif">
