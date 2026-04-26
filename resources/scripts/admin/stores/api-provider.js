@@ -4,7 +4,16 @@ import axios from 'axios'
 export const useApiProviderStore = defineStore('apiProvider', {
   state: () => ({
     providers: [],
-    provider: {},
+    provider: {
+      name: '',
+      driver: '',
+      key: '',
+      host: '',
+      active: true,
+      config: {
+        keys: [],
+      },
+    },
   }),
   actions: {
     fetchProviders(params) {

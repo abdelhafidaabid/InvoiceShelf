@@ -21,7 +21,10 @@ class ApiProviderController extends Controller
 
     public function store(ApiProviderRequest $request)
     {
-        $provider = ApiProvider::createFromRequest($request);
+        $provider = ApiProvider::create(array_merge($request->validated(), [
+            'config' => $request->config,
+            'company_id' => $request->header('company'),
+        ]));
 
         return new ApiProviderResource($provider);
     }
@@ -33,7 +36,9 @@ class ApiProviderController extends Controller
 
     public function update(ApiProviderRequest $request, ApiProvider $apiProvider)
     {
-        $apiProvider->updateFromRequest($request);
+        $apiProvider->update(array_merge($request->validated(), [
+            'config' => $request->config,
+        ]));
 
         return new ApiProviderResource($apiProvider);
     }
@@ -49,12 +54,18 @@ class ApiProviderController extends Controller
     {
         $request->validate([
             'driver' => 'required|string',
-            'key' => 'required|string',
+            'key' => 'nullable|string',
             'host' => 'required|string',
+            'config.keys' => 'nullable|array',
         ]);
 
+        $keys = array_filter(array_unique(array_merge(
+            [$request->key],
+            $request->input('config.keys', [])
+        )));
+
         $result = AmountToWords::test(
-            $request->key,
+            $keys,
             $request->host,
             $request->driver
         );

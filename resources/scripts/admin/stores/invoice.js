@@ -516,6 +516,12 @@ export const useInvoiceStore = (useWindow = false) => {
           this.newInvoice.discount_per_item =
             companyStore.selectedCompanySettings.discount_per_item
 
+          this.newInvoice.show_signature =
+            companyStore.selectedCompanySettings.invoice_show_signature === 'YES'
+          this.newInvoice.show_page_number =
+            companyStore.selectedCompanySettings.invoice_show_page_number ===
+            'YES'
+
           let dateFormat = 'YYYY-MM-DD'
           if (companyStore.selectedCompanySettings.invoice_use_time === 'YES') {
             dateFormat += ' HH:mm'

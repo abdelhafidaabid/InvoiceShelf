@@ -43,20 +43,26 @@ class AmountToWords
             $provider = $providerQuery->first();
 
             if ($provider) {
-                $key = $provider->key;
+                $primaryKey = $provider->key;
+                $backupKeys = $provider->config['keys'] ?? [];
                 $host = $provider->host;
             } else {
                 $config = config('services.rapidapi.number2words');
-                $key = $config['key'] ?? null;
+                $primaryKey = $config['key'] ?? null;
+                $backupKeys = [];
                 $host = $config['host'] ?? 'number2words4.p.rapidapi.com';
             }
 
-            if (empty($key)) {
+            $allKeys = array_filter(array_unique(array_merge([$primaryKey], $backupKeys)));
+
+            if (empty($allKeys)) {
                 return (string) $normalizedAmount;
             }
 
+            // Shuffle keys for random rotation
+            shuffle($allKeys);
+
             // The API requires a dialect that matches the locale.
-            // e.g. 'en' → 'GB', 'fr' → 'FR', 'de' → 'DE', etc.
             $dialectMap = [
                 'en' => 'GB',
                 'fr' => 'FR',
@@ -73,57 +79,70 @@ class AmountToWords
             $localeBase = strtolower(explode('_', $locale)[0]);
             $dialect = $dialectMap[$localeBase] ?? 'GB';
 
-            // The API returns plain text (not JSON), e.g.:
-            // "twelve million three hundred… US dollars and ninety cents"
-            $response = Http::timeout(10)
-                ->withHeaders([
-                    'x-rapidapi-host' => $host,
-                    'x-rapidapi-key' => $key,
-                    'Content-Type' => 'application/json',
-                ])
-                ->get("https://{$host}/api", [
-                    'value' => $normalizedAmount,
-                    'languageCode' => $localeBase,
-                    'currencyCode' => $currencyCode === 'MAD' ? 'EUR' : $currencyCode,
-                    'dialect' => $dialect,
-                    'formatStyle' => 'standard',
-                ]);
+            $lastResult = (string) $normalizedAmount;
 
-            if (! $response->successful()) {
-                Log::error('AmountToWords API error', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
+            foreach ($allKeys as $currentKey) {
+                try {
+                    $response = Http::timeout(10)
+                        ->withHeaders([
+                            'x-rapidapi-host' => $host,
+                            'x-rapidapi-key' => $currentKey,
+                            'Content-Type' => 'application/json',
+                        ])
+                        ->get("https://{$host}/api", [
+                            'value' => $normalizedAmount,
+                            'languageCode' => $localeBase,
+                            'currencyCode' => $currencyCode === 'MAD' ? 'EUR' : $currencyCode,
+                            'dialect' => $dialect,
+                            'formatStyle' => 'standard',
+                        ]);
 
-                return (string) $normalizedAmount;
+                    if ($response->successful()) {
+                        $raw = trim($response->body());
+                        $result = json_decode($raw, true) ?? $raw;
+
+                        if (is_string($result) && ! empty($result)) {
+                            // Patch currency wording for MAD
+                            if ($currencyCode === 'MAD') {
+                                $result = str_replace(
+                                    ['euros', 'euro', 'centimes', 'centime'],
+                                    ['dirhams', 'dirham', 'centimes', 'centime'],
+                                    $result
+                                );
+                            }
+
+                            // Cache forever — only on success
+                            Cache::forever($cacheKey, $result);
+
+                            return $result;
+                        }
+                    }
+
+                    // If we get a 429 (Too Many Requests), we continue to the next key
+                    if ($response->status() === 429) {
+                        Log::warning('AmountToWords: Key quota reached (429). Rotating to next key.', ['key' => substr($currentKey, 0, 8).'...']);
+
+                        continue;
+                    }
+
+                    // For other errors (401, 500, etc.), we log and stop according to user request
+                    Log::error('AmountToWords API error', [
+                        'status' => $response->status(),
+                        'body' => $response->body(),
+                    ]);
+
+                    return (string) $normalizedAmount;
+                } catch (\Exception $e) {
+                    Log::error('AmountToWords exception during rotation: '.$e->getMessage());
+
+                    // On exception (timeout, etc.), we could also try next key, but let's stick to the 429 rule
+                    return (string) $normalizedAmount;
+                }
             }
 
-            // Response body is a JSON-encoded plain string: "\"twelve million…\""
-            // Strip surrounding quotes if the API wraps the text in JSON string encoding.
-            $raw = trim($response->body());
-            $result = json_decode($raw, true) ?? $raw;
-
-            if (! is_string($result) || empty($result)) {
-                Log::error('AmountToWords unexpected response', ['body' => $raw]);
-
-                return (string) $normalizedAmount;
-            }
-
-            // Patch currency wording for MAD
-            if ($currencyCode === 'MAD') {
-                $result = str_replace(
-                    ['euros', 'euro', 'centimes', 'centime'],
-                    ['dirhams', 'dirham', 'centimes', 'centime'],
-                    $result
-                );
-            }
-
-            // Cache forever — only on success
-            Cache::forever($cacheKey, $result);
-
-            return $result;
+            return $lastResult;
         } catch (\Exception $e) {
-            Log::error('AmountToWords exception: '.$e->getMessage());
+            Log::error('AmountToWords general exception: '.$e->getMessage());
 
             return (string) $normalizedAmount;
         }
@@ -131,49 +150,69 @@ class AmountToWords
 
     /**
      * Test the API connection with provided credentials.
+     * Supports testing rotation if an array of keys is provided.
      */
-    public static function test(string $key, string $host, string $driver): array
+    public static function test(string|array $keys, string $host, string $driver): array
     {
         if ($driver !== 'number2words') {
             return ['success' => false, 'message' => 'Driver not supported for testing.'];
         }
 
-        try {
-            $response = Http::timeout(10)
-                ->withHeaders([
-                    'x-rapidapi-host' => $host,
-                    'x-rapidapi-key' => $key,
-                    'Content-Type' => 'application/json',
-                ])
-                ->get("https://{$host}/api", [
-                    'value' => 123.45,
-                    'languageCode' => 'en',
-                    'currencyCode' => 'USD',
-                    'dialect' => 'GB',
-                    'formatStyle' => 'standard',
-                ]);
+        $allKeys = is_array($keys) ? $keys : [$keys];
+        $allKeys = array_filter(array_unique($allKeys));
 
-            if ($response->successful()) {
-                $raw = trim($response->body());
-                $result = json_decode($raw, true) ?? $raw;
+        if (empty($allKeys)) {
+            return ['success' => false, 'message' => 'No API keys provided for testing.'];
+        }
 
-                return [
-                    'success' => true,
-                    'message' => 'Connection successful!',
-                    'data' => $result,
+        $results = [];
+        $anySuccess = false;
+
+        foreach ($allKeys as $currentKey) {
+            try {
+                $response = Http::timeout(10)
+                    ->withHeaders([
+                        'x-rapidapi-host' => $host,
+                        'x-rapidapi-key' => $currentKey,
+                        'Content-Type' => 'application/json',
+                    ])
+                    ->get("https://{$host}/api", [
+                        'value' => 123.45,
+                        'languageCode' => 'en',
+                        'currencyCode' => 'USD',
+                        'dialect' => 'GB',
+                        'formatStyle' => 'standard',
+                    ]);
+
+                if ($response->successful()) {
+                    $raw = trim($response->body());
+                    $result = json_decode($raw, true) ?? $raw;
+                    $results[] = [
+                        'key' => substr($currentKey, 0, 8).'...',
+                        'status' => 'Success',
+                        'data' => $result,
+                    ];
+                    $anySuccess = true;
+                } else {
+                    $results[] = [
+                        'key' => substr($currentKey, 0, 8).'...',
+                        'status' => 'Error: '.$response->status(),
+                        'body' => $response->body(),
+                    ];
+                }
+            } catch (\Exception $e) {
+                $results[] = [
+                    'key' => substr($currentKey, 0, 8).'...',
+                    'status' => 'Exception',
+                    'message' => $e->getMessage(),
                 ];
             }
-
-            return [
-                'success' => false,
-                'message' => 'API returned an error: '.$response->status(),
-                'error' => $response->body(),
-            ];
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'message' => 'Connection failed: '.$e->getMessage(),
-            ];
         }
+
+        return [
+            'success' => $anySuccess,
+            'message' => $anySuccess ? 'Rotation test completed. At least one key is working.' : 'All keys failed.',
+            'details' => $results,
+        ];
     }
 }

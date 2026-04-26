@@ -355,11 +355,13 @@
     <hr class="header-bottom-divider">
 
     
+    @if($invoice->show_page_number)
     <div class="pdf-footer">
         <div class="page-number-container">
             <span class="current-page"></span> / DOMPDF_PAGE_COUNT_PLACEHOLDER
         </div>
     </div>
+    @endif
 
     <div class="content-wrapper">
         <div class="main-content">

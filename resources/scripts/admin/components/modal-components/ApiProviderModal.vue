@@ -54,9 +54,51 @@
               v-model="apiProviderStore.provider.key"
               type="text"
               name="key"
+              :placeholder="$t('api_provider.primary_key_placeholder')"
               :invalid="v$.provider.key.$error"
             />
           </BaseInputGroup>
+
+          <div v-if="apiProviderStore.provider.driver === 'number2words'" class="space-y-4">
+            <div class="flex items-center justify-between">
+              <label class="block text-sm font-medium text-gray-700">
+                {{ $t('api_provider.backup_keys') }}
+              </label>
+              <BaseButton
+                variant="primary-outline"
+                size="sm"
+                type="button"
+                @click="addBackupKey"
+              >
+                <template #left="slotProps">
+                  <BaseIcon name="PlusIcon" :class="slotProps.class" />
+                </template>
+                {{ $t('api_provider.add_key') }}
+              </BaseButton>
+            </div>
+
+            <div
+              v-for="(key, index) in apiProviderStore.provider.config.keys"
+              :key="index"
+              class="flex items-center space-x-2"
+            >
+              <div class="flex-1">
+                <BaseInput
+                  v-model="apiProviderStore.provider.config.keys[index]"
+                  type="text"
+                  :placeholder="$t('api_provider.backup_key_placeholder')"
+                />
+              </div>
+              <BaseButton
+                variant="danger"
+                size="sm"
+                type="button"
+                @click="removeBackupKey(index)"
+              >
+                <BaseIcon name="TrashIcon" class="w-4 h-4" />
+              </BaseButton>
+            </div>
+          </div>
 
           <BaseInputGroup
             :label="$t('api_provider.host')"
@@ -168,10 +210,29 @@ async function submit() {
   if (v$.value.$invalid) return
 
   isSaving.value = true
+
+  // Ensure config.keys is initialized
+  if (!apiProviderStore.provider.config || typeof apiProviderStore.provider.config !== 'object') {
+    apiProviderStore.provider.config = { keys: [] }
+  }
+  if (!Array.isArray(apiProviderStore.provider.config.keys)) {
+    apiProviderStore.provider.config.keys = []
+  }
+
   const action = isEdit.value ? apiProviderStore.updateProvider : apiProviderStore.addProvider
 
+  // Clean up keys before saving: remove empty strings and duplicates
+  if (apiProviderStore.provider.config && Array.isArray(apiProviderStore.provider.config.keys)) {
+    apiProviderStore.provider.config.keys = apiProviderStore.provider.config.keys
+      .map((k) => k.trim())
+      .filter((k) => k !== '')
+    apiProviderStore.provider.config.keys = [...new Set(apiProviderStore.provider.config.keys)]
+  }
+
   try {
-    await action(apiProviderStore.provider)
+    // Use a clean object to avoid any reactivity-related serialization issues
+    const payload = JSON.parse(JSON.stringify(apiProviderStore.provider))
+    await action(payload)
     modalStore.refreshData ? modalStore.refreshData() : ''
     closeModal()
   } catch (error) {
@@ -213,6 +274,24 @@ async function testConnection() {
   }
 }
 
+function addBackupKey() {
+  if (!apiProviderStore.provider.config || typeof apiProviderStore.provider.config !== 'object') {
+    apiProviderStore.provider.config = { keys: [] }
+  }
+
+  if (!Array.isArray(apiProviderStore.provider.config.keys)) {
+    apiProviderStore.provider.config.keys = []
+  }
+
+  apiProviderStore.provider.config.keys.push('')
+}
+
+function removeBackupKey(index) {
+  if (Array.isArray(apiProviderStore.provider.config.keys)) {
+    apiProviderStore.provider.config.keys.splice(index, 1)
+  }
+}
+
 function closeModal() {
   modalStore.closeModal()
   setTimeout(() => {
@@ -222,7 +301,9 @@ function closeModal() {
       key: '',
       host: '',
       active: true,
-      config: {},
+      config: {
+        keys: [],
+      },
     }
     v$.value.$reset()
   }, 300)

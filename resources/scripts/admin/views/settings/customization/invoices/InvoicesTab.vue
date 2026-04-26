@@ -29,6 +29,20 @@
         )
       "
     />
+    <BaseSwitchSection
+      v-model="invoiceShowSignatureField"
+      :title="$t('general.show_signature_and_stamp')"
+      :description="
+        $t('settings.customization.invoices.invoice_show_signature_description')
+      "
+    />
+    <BaseSwitchSection
+      v-model="invoiceShowPageNumberField"
+      :title="$t('general.show_page_number')"
+      :description="
+        $t('settings.customization.invoices.invoice_show_page_number_description')
+      "
+    />
   </ul>
 </template>
 
@@ -46,6 +60,8 @@ const companyStore = useCompanyStore()
 
 const invoiceSettings = reactive({
   invoice_email_attachment: null,
+  invoice_show_signature: null,
+  invoice_show_page_number: null,
 })
 
 utils.mergeSettings(invoiceSettings, {
@@ -66,6 +82,50 @@ const sendAsAttachmentField = computed({
     }
 
     invoiceSettings.invoice_email_attachment = value
+
+    await companyStore.updateCompanySettings({
+      data,
+      message: 'general.setting_updated',
+    })
+  },
+})
+
+const invoiceShowSignatureField = computed({
+  get: () => {
+    return invoiceSettings.invoice_show_signature === 'YES'
+  },
+  set: async (newValue) => {
+    const value = newValue ? 'YES' : 'NO'
+
+    let data = {
+      settings: {
+        invoice_show_signature: value,
+      },
+    }
+
+    invoiceSettings.invoice_show_signature = value
+
+    await companyStore.updateCompanySettings({
+      data,
+      message: 'general.setting_updated',
+    })
+  },
+})
+
+const invoiceShowPageNumberField = computed({
+  get: () => {
+    return invoiceSettings.invoice_show_page_number === 'YES'
+  },
+  set: async (newValue) => {
+    const value = newValue ? 'YES' : 'NO'
+
+    let data = {
+      settings: {
+        invoice_show_page_number: value,
+      },
+    }
+
+    invoiceSettings.invoice_show_page_number = value
 
     await companyStore.updateCompanySettings({
       data,
