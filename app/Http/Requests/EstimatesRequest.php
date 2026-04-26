@@ -140,8 +140,8 @@ class EstimatesRequest extends FormRequest
                 'base_total' => $this->total * $exchange_rate,
                 'base_tax' => $this->tax * $exchange_rate,
                 'currency_id' => $currency,
-                'show_signature' => $this->has('show_signature') ? $this->show_signature : (CompanySetting::getSetting('estimate_show_signature', $this->header('company')) !== 'NO'),
-                'show_page_number' => $this->has('show_page_number') ? $this->show_page_number : (CompanySetting::getSetting('estimate_show_page_number', $this->header('company')) !== 'NO'),
+                'show_signature' => $this->has('show_signature') ? $this->show_signature : (CompanySetting::getSetting('estimate_show_signature', $this->header('company')) === 'YES'),
+                'show_page_number' => $this->has('show_page_number') ? $this->show_page_number : (CompanySetting::getSetting('estimate_show_page_number', $this->header('company')) === 'YES'),
             ])
             ->toArray();
     }

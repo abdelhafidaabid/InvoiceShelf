@@ -98,7 +98,7 @@ const sendAsAttachmentField = computed({
 
 const showSignature = computed({
   get: () => {
-    return invoiceSettings.invoice_show_signature !== 'NO'
+    return invoiceSettings.invoice_show_signature === 'YES'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -120,7 +120,7 @@ const showSignature = computed({
 
 const showPageNumber = computed({
   get: () => {
-    return invoiceSettings.invoice_show_page_number !== 'NO'
+    return invoiceSettings.invoice_show_page_number === 'YES'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'

@@ -104,7 +104,7 @@ const sendAsAttachmentField = computed({
 
 const showSignature = computed({
   get: () => {
-    return estimateSettings.estimate_show_signature !== 'NO'
+    return estimateSettings.estimate_show_signature === 'YES'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -126,7 +126,7 @@ const showSignature = computed({
 
 const showPageNumber = computed({
   get: () => {
-    return estimateSettings.estimate_show_page_number !== 'NO'
+    return estimateSettings.estimate_show_page_number === 'YES'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
