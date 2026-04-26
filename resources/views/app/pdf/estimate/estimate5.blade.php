@@ -318,7 +318,7 @@
                         <span class="metadata-label">{{ $estimate->getPdfLabel('estimate_pdf_date_label', 'pdf_estimate_date') }} :</span> <span class="metadata-value">{{ $estimate->formattedEstimateDate }}</span>
                     </div>
                 </td>
-                <td width="40%" class="text-left" style="vertical-align: top;">
+                <td width="40%" class="text-right" style="vertical-align: top;">
                     @if ($logo)
                         <img class="header-logo" src="{{ \App\Space\ImageUtils::toBase64Src($logo) }}" alt="Logo">
                     @endif
