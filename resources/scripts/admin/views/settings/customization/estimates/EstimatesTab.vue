@@ -30,28 +30,30 @@
       "
     />
     <BaseSwitchSection
-      v-model="estimateShowSignatureField"
-      :title="$t('general.show_signature_and_stamp')"
+      v-model="showSignature"
+      :title="$t('settings.customization.estimates.estimate_show_signature')"
       :description="
         $t(
           'settings.customization.estimates.estimate_show_signature_description'
         )
       "
+      class="mt-6"
     />
     <BaseSwitchSection
-      v-model="estimateShowPageNumberField"
-      :title="$t('general.show_page_number')"
+      v-model="showPageNumber"
+      :title="$t('settings.customization.estimates.estimate_show_page_number')"
       :description="
         $t(
           'settings.customization.estimates.estimate_show_page_number_description'
         )
       "
+      class="mt-6"
     />
   </ul>
 </template>
 
 <script setup>
-import { computed, reactive, inject } from 'vue'
+import { computed, reactive, inject, watch } from 'vue'
 import { useCompanyStore } from '@/scripts/admin/stores/company'
 
 import EstimatesTabEstimateNumber from './EstimatesTabEstimateNumber.vue'
@@ -70,13 +72,17 @@ const estimateSettings = reactive({
   estimate_show_page_number: null,
 })
 
-utils.mergeSettings(estimateSettings, {
-  ...companyStore.selectedCompanySettings,
-})
+watch(
+  () => companyStore.selectedCompanySettings,
+  (newSettings) => {
+    utils.mergeSettings(estimateSettings, newSettings)
+  },
+  { immediate: true, deep: true }
+)
 
 const sendAsAttachmentField = computed({
   get: () => {
-    return estimateSettings.estimate_email_attachment === 'YES'
+    return estimateSettings.estimate_email_attachment !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -96,9 +102,9 @@ const sendAsAttachmentField = computed({
   },
 })
 
-const estimateShowSignatureField = computed({
+const showSignature = computed({
   get: () => {
-    return estimateSettings.estimate_show_signature === 'YES'
+    return estimateSettings.estimate_show_signature !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -118,9 +124,9 @@ const estimateShowSignatureField = computed({
   },
 })
 
-const estimateShowPageNumberField = computed({
+const showPageNumber = computed({
   get: () => {
-    return estimateSettings.estimate_show_page_number === 'YES'
+    return estimateSettings.estimate_show_page_number !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'

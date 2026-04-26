@@ -30,24 +30,26 @@
       "
     />
     <BaseSwitchSection
-      v-model="invoiceShowSignatureField"
-      :title="$t('general.show_signature_and_stamp')"
+      v-model="showSignature"
+      :title="$t('settings.customization.invoices.invoice_show_signature')"
       :description="
         $t('settings.customization.invoices.invoice_show_signature_description')
       "
+      class="mt-6"
     />
     <BaseSwitchSection
-      v-model="invoiceShowPageNumberField"
-      :title="$t('general.show_page_number')"
+      v-model="showPageNumber"
+      :title="$t('settings.customization.invoices.invoice_show_page_number')"
       :description="
         $t('settings.customization.invoices.invoice_show_page_number_description')
       "
+      class="mt-6"
     />
   </ul>
 </template>
 
 <script setup>
-import { computed, reactive, inject } from 'vue'
+import { computed, reactive, inject, watch } from 'vue'
 import { useCompanyStore } from '@/scripts/admin/stores/company'
 import InvoicesTabInvoiceNumber from './InvoicesTabInvoiceNumber.vue'
 import InvoicesTabRetrospective from './InvoicesTabRetrospective.vue'
@@ -64,13 +66,17 @@ const invoiceSettings = reactive({
   invoice_show_page_number: null,
 })
 
-utils.mergeSettings(invoiceSettings, {
-  ...companyStore.selectedCompanySettings,
-})
+watch(
+  () => companyStore.selectedCompanySettings,
+  (newSettings) => {
+    utils.mergeSettings(invoiceSettings, newSettings)
+  },
+  { immediate: true, deep: true }
+)
 
 const sendAsAttachmentField = computed({
   get: () => {
-    return invoiceSettings.invoice_email_attachment === 'YES'
+    return invoiceSettings.invoice_email_attachment !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -90,9 +96,9 @@ const sendAsAttachmentField = computed({
   },
 })
 
-const invoiceShowSignatureField = computed({
+const showSignature = computed({
   get: () => {
-    return invoiceSettings.invoice_show_signature === 'YES'
+    return invoiceSettings.invoice_show_signature !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
@@ -112,9 +118,9 @@ const invoiceShowSignatureField = computed({
   },
 })
 
-const invoiceShowPageNumberField = computed({
+const showPageNumber = computed({
   get: () => {
-    return invoiceSettings.invoice_show_page_number === 'YES'
+    return invoiceSettings.invoice_show_page_number !== 'NO'
   },
   set: async (newValue) => {
     const value = newValue ? 'YES' : 'NO'
