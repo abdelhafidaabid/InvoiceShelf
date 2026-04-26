@@ -7,7 +7,7 @@
     <style type="text/css">
         /* -- Base -- */
         body {
-            font-family: "DejaVu Sans";
+            font-family: "{{ $pdf_font }}", sans-serif;
         }
 
         html {
@@ -77,7 +77,7 @@
             font-size: 24px;
             line-height: 36px;
             text-align: right;
-            font-family: "DejaVu Sans";
+            font-family: "{{ $pdf_font }}", sans-serif;
         }
 
         .estimate-details-container h4 {

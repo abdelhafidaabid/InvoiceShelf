@@ -67,6 +67,10 @@ class InvoicesRequest extends FormRequest
                 'boolean',
                 'nullable',
             ],
+            'show_page_number' => [
+                'boolean',
+                'nullable',
+            ],
             'items' => [
                 'required',
                 'array',

@@ -7,7 +7,7 @@
     <style type="text/css">
         /* -- Base & Fonts -- */
         body {
-            font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "{{ $pdf_font }}", sans-serif;
             color: #222222;
             font-size: 11px;
         }

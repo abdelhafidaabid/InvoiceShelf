@@ -12,5 +12,6 @@ export default {
   payment_method_id: '',
   customFields: [],
   fields: [],
-  show_signature: true
+  show_signature: true,
+  show_page_number: true
 }

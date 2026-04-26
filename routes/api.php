@@ -410,6 +410,8 @@ Route::prefix('/v1')->group(function () {
 
             Route::get('/pdf/drivers', [PDFConfigurationController::class, 'getDrivers']);
 
+            Route::get('/pdf/fonts', [PDFConfigurationController::class, 'getFonts']);
+
             Route::get('/pdf/config', [PDFConfigurationController::class, 'getEnvironment']);
 
             Route::post('/pdf/config', [PDFConfigurationController::class, 'saveEnvironment']);

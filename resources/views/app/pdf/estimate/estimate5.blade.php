@@ -16,7 +16,7 @@
 
         /* -- Base & Fonts -- */
         body {
-            font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "{{ $pdf_font }}", sans-serif;
             color: #000000;
             font-size: 11px;
             margin: 0;
@@ -92,6 +92,7 @@
 
         /* -- Header -- */
         .header-container {
+            max-width: 700px;
             width: 100%;
             padding: 40px 60px 0 60px;
             position: relative;
@@ -107,10 +108,10 @@
         }
         .header-year {
             font-size: 18px;
-            margin-left: 5px;
+            margin-left: 2px;
         }
         .header-metadata {
-            margin-top: 15px;
+            margin-top: 5px;
             font-size: 14px;
             color: #000;
         }
@@ -125,8 +126,8 @@
         /* -- Content Wrapper -- */
         .content-wrapper {
             display: block;
-            padding: 0 60px;
-            margin-top: 30px;
+            padding: 0 20px;
+            margin-top: 10px;
         }
 
         /* -- Client Info -- */
@@ -305,9 +306,9 @@
     <div class="pdf-header">
         <div class="top-left-shape"></div>
         <div class="header-container">
-            <table width="100%">
+            <table style="width: 100%;">
             <tr>
-                <td width="60%" style="vertical-align: top; padding-top: 10px;">
+                <td width="60%" style="vertical-align: top; padding-top: 30px; padding-left: 5px;">
                     <div class="header-title-text text-uppercase">
                         {{ $estimate->getPdfLabel('estimate_pdf_label', 'pdf_estimate_label') }} <span class="header-year">{{ date('Y') }}</span>
                     </div>
@@ -335,9 +336,11 @@
             </div>
         @endif
         
+        @if($estimate->show_page_number)
         <div class="page-number-container">
             <span class="current-page"></span> / DOMPDF_PAGE_COUNT_PLACEHOLDER
         </div>
+        @endif
     </div>
 
 

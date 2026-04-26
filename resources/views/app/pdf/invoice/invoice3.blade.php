@@ -9,7 +9,7 @@
         /* -- Base -- */
 
         body {
-            font-family: "DejaVu Sans";
+            font-family: "{{ $pdf_font }}", sans-serif;
         }
 
         html {

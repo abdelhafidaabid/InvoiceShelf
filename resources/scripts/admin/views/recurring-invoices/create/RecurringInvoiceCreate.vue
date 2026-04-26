@@ -120,10 +120,14 @@
             />
 
             <!-- Recurring Invoice Signature Toggle -->
-            <div class="mt-4">
+            <div class="flex gap-4 mt-4">
               <BaseSwitch
                 v-model="recurringInvoiceStore.newRecurringInvoice.show_signature"
                 :label-right="$t('general.show_signature_and_stamp')"
+              />
+              <BaseSwitch
+                v-model="recurringInvoiceStore.newRecurringInvoice.show_page_number"
+                :label-right="$t('general.show_page_number')"
               />
             </div>
           </div>

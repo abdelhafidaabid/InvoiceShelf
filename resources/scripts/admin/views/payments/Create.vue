@@ -228,10 +228,14 @@
         </div>
 
         <!-- Payment Signature Toggle -->
-        <div class="mt-6">
+        <div class="flex gap-4 mt-6">
           <BaseSwitch
             v-model="paymentStore.currentPayment.show_signature"
             :label-right="$t('general.show_signature_and_stamp')"
+          />
+          <BaseSwitch
+            v-model="paymentStore.currentPayment.show_page_number"
+            :label-right="$t('general.show_page_number')"
           />
         </div>
 

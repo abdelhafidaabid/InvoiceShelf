@@ -140,7 +140,8 @@
       "no_results_found": "Aucun résultat"
     },
     "copy_to_clipboard": "Copier dans le presse-papier",
-    "show_signature_and_stamp": "Afficher la signature et le cachet"
+    "show_signature_and_stamp": "Afficher la signature et le cachet",
+    "show_page_number": "Afficher le numéro de page"
   },
   "dashboard": {
     "select_year": "Sélectionnez l'année",

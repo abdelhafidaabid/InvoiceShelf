@@ -37,5 +37,6 @@ export default function () {
     selectedNote: null,
     selectedCurrency: '',
     show_signature: true,
+    show_page_number: true,
   }
 }

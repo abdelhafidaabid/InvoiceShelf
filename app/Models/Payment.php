@@ -50,6 +50,8 @@ class Payment extends Model implements HasMedia
         return [
             'notes' => 'string',
             'exchange_rate' => 'float',
+            'show_signature' => 'boolean',
+            'show_page_number' => 'boolean',
         ];
     }
 
@@ -391,6 +393,7 @@ class Payment extends Model implements HasMedia
             'notes' => $this->getNotes(),
             'logo' => $logo ?? null,
             'stamp' => $company->stamp_path ?? null,
+            'pdf_font' => CompanySetting::getSetting('payment_pdf_font', $this->company_id) ?? 'DejaVu Sans',
         ]);
 
         if (request()->has('preview')) {

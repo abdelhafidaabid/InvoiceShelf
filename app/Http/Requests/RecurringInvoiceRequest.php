@@ -86,6 +86,10 @@ class RecurringInvoiceRequest extends FormRequest
                 'boolean',
                 'nullable',
             ],
+            'show_page_number' => [
+                'boolean',
+                'nullable',
+            ],
         ];
 
         $customer = Customer::find($this->customer_id);

@@ -16,7 +16,7 @@
 
         /* -- Base & Fonts -- */
         body {
-            font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
+            font-family: "{{ $pdf_font }}", sans-serif;
             color: #000000;
             font-size: 11px;
             margin: 0;
@@ -292,7 +292,7 @@
         <div class="header-container">
             <table width="100%">
             <tr>
-                <td width="60%" style="vertical-align: top; padding-top: 10px;">
+                <td width="60%" style="vertical-align: top; padding-top: 30px;">
                     <div class="header-title-text text-uppercase">
                         {{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }} <span class="header-year">{{ date('Y') }}</span>
                     </div>
@@ -312,9 +312,11 @@
     </div>
 
     <div class="pdf-footer">
+        @if($invoice->show_page_number)
         <div class="page-number-container">
             <span class="current-page"></span> / DOMPDF_PAGE_COUNT_PLACEHOLDER
         </div>
+        @endif
 
         <div class="bottom-right-shape"></div>
         <div class="bottom-right-shape-gold"></div>

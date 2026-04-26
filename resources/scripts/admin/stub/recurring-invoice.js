@@ -16,6 +16,7 @@ export default function () {
     tax: 0,
     notes: '',
     show_signature: true,
+    show_page_number: true,
     discount_type: 'fixed',
     discount_val: 0,
     discount: 0,

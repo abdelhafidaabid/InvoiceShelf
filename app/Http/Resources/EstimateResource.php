@@ -48,6 +48,7 @@ class EstimateResource extends JsonResource
             'sales_tax_type' => $this->sales_tax_type,
             'sales_tax_address_type' => $this->sales_tax_address_type,
             'show_signature' => $this->show_signature,
+            'show_page_number' => $this->show_page_number,
             'items' => $this->when($this->items()->exists(), function () {
                 return EstimateItemResource::collection($this->items);
             }),

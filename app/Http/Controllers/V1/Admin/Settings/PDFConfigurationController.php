@@ -31,6 +31,35 @@ class PDFConfigurationController extends Controller
         return response()->json($drivers);
     }
 
+    public function getFonts()
+    {
+        $this->authorize('manage pdf config');
+
+        $fontsPath = base_path('vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json');
+
+        if (! file_exists($fontsPath)) {
+            return response()->json([
+                'DejaVu Sans',
+                'Helvetica',
+                'Times-Roman',
+                'Courier',
+            ]);
+        }
+
+        $fontsJson = json_decode(file_get_contents($fontsPath), true);
+        $fonts = array_keys($fontsJson);
+
+        // Map to user-friendly names and remove duplicates/internal names
+        $fonts = array_map(function ($font) {
+            return ucwords($font);
+        }, $fonts);
+
+        $fonts = array_unique($fonts);
+        sort($fonts);
+
+        return response()->json($fonts);
+    }
+
     public function getEnvironment()
     {
         $this->authorize('manage pdf config');

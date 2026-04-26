@@ -52,6 +52,10 @@ class PaymentRequest extends FormRequest
                 'boolean',
                 'nullable',
             ],
+            'show_page_number' => [
+                'boolean',
+                'nullable',
+            ],
         ];
 
         if ($this->isMethod('PUT')) {

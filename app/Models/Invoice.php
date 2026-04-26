@@ -71,6 +71,8 @@ class Invoice extends Model implements HasMedia
             'discount' => 'float',
             'discount_val' => 'integer',
             'exchange_rate' => 'float',
+            'show_signature' => 'boolean',
+            'show_page_number' => 'boolean',
         ];
     }
 
@@ -601,6 +603,7 @@ class Invoice extends Model implements HasMedia
             'stamp' => $company->stamp_path ?? null,
             'taxes' => $taxes,
             'show_shipping_address' => $this->shouldShowShippingAddress(),
+            'pdf_font' => CompanySetting::getSetting('invoice_pdf_font', $this->company_id) ?? 'DejaVu Sans',
         ]);
 
         $template = PdfTemplateUtils::findFormattedTemplate('invoice', $invoiceTemplate, '');

@@ -13,6 +13,10 @@
 
   <EstimatesTabDefaultFormats />
 
+  <BaseDivider class="my-8" />
+
+  <PDFFontCustomizer type="estimate" />
+
   <BaseDivider class="mt-6 mb-2" />
 
   <ul class="divide-y divide-gray-200">
@@ -36,6 +40,7 @@ import EstimatesTabEstimateNumber from './EstimatesTabEstimateNumber.vue'
 import EstimatesTabExpiryDate from './EstimatesTabExpiryDate.vue'
 import EstimatesTabDefaultFormats from './EstimatesTabDefaultFormats.vue'
 import EstimatesTabConvertEstimate from './EstimatesTabConvertEstimate.vue'
+import PDFFontCustomizer from '../PDFFontCustomizer.vue'
 
 const utils = inject('utils')
 
