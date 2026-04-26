@@ -299,6 +299,16 @@ const allFields = ref([
     inputType: 'number',
     allowMultiple: false,
   },
+  {
+    label: t('settings.customization.start_number'),
+    description: t('settings.customization.start_number_description'),
+    name: 'START_NUMBER',
+    paramLabel: t('settings.customization.start_number_param_label'),
+    value: '1',
+    inputDisabled: false,
+    inputType: 'number',
+    allowMultiple: false,
+  },
 ])
 
 const computedFields = computed(() => {
@@ -370,6 +380,12 @@ function isFieldAdded(field) {
 function onSelectField(field) {
   if (isFieldAdded(field) && !field.allowMultiple) {
     return
+  }
+
+  if (field.name === 'START_NUMBER') {
+    if (!confirm(t('settings.customization.warning_start_number'))) {
+      return
+    }
   }
 
   selectedFields.value.push({ ...field, id: Guid.raw() })

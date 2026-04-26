@@ -10,7 +10,7 @@ use App\Models\Customer;
  */
 class SerialNumberFormatter
 {
-    public const VALID_PLACEHOLDERS = ['CUSTOMER_SERIES', 'SEQUENCE', 'DATE_FORMAT', 'SERIES', 'RANDOM_SEQUENCE', 'DELIMITER', 'CUSTOMER_SEQUENCE'];
+    public const VALID_PLACEHOLDERS = ['CUSTOMER_SERIES', 'SEQUENCE', 'DATE_FORMAT', 'SERIES', 'RANDOM_SEQUENCE', 'DELIMITER', 'CUSTOMER_SEQUENCE', 'START_NUMBER'];
 
     private $model;
 
@@ -92,7 +92,7 @@ class SerialNumberFormatter
                 $companyId
             );
         }
-        $this->setNextNumbers();
+        $this->setNextNumbers($format);
 
         $serialNumber = $this->generateSerialNumber(
             $format
@@ -101,10 +101,10 @@ class SerialNumberFormatter
         return $serialNumber;
     }
 
-    public function setNextNumbers()
+    public function setNextNumbers(?string $format = null)
     {
         $this->nextSequenceNumber ?
-            $this->nextSequenceNumber : $this->setNextSequenceNumber();
+            $this->nextSequenceNumber : $this->setNextSequenceNumber($format);
 
         $this->nextCustomerSequenceNumber ?
             $this->nextCustomerSequenceNumber : $this->setNextCustomerSequenceNumber();
@@ -115,9 +115,25 @@ class SerialNumberFormatter
     /**
      * @return $this
      */
-    public function setNextSequenceNumber()
+    public function setNextSequenceNumber(?string $format = null)
     {
         $companyId = $this->company;
+        $modelName = strtolower(class_basename($this->model));
+        $settingKey = $modelName . '_number_format';
+
+        if ($format === null) {
+            $format = CompanySetting::getSetting($settingKey, $companyId);
+        }
+
+        $startNumber = 1;
+
+        if ($format) {
+            $placeholders = self::getPlaceholders($format);
+            $startNumberPlaceholder = $placeholders->where('name', 'START_NUMBER')->first();
+            if ($startNumberPlaceholder && isset($startNumberPlaceholder['value'])) {
+                $startNumber = (int) $startNumberPlaceholder['value'];
+            }
+        }
 
         $last = $this->model::orderBy('sequence_number', 'desc')
             ->where('company_id', $companyId)
@@ -125,7 +141,8 @@ class SerialNumberFormatter
             ->take(1)
             ->first();
 
-        $this->nextSequenceNumber = ($last) ? $last->sequence_number + 1 : 1;
+        $lastSequence = ($last) ? $last->sequence_number : 0;
+        $this->nextSequenceNumber = max($lastSequence + 1, $startNumber);
 
         return $this;
     }
@@ -219,6 +236,10 @@ class SerialNumberFormatter
                 case 'CUSTOMER_SEQUENCE':
                     $serialNumber .= str_pad($this->nextCustomerSequenceNumber, $value, 0, STR_PAD_LEFT);
 
+                    break;
+                case 'START_NUMBER':
+                    // This placeholder is only used for setting the sequence start
+                    // and should not appear in the generated serial number.
                     break;
                 default:
                     $serialNumber .= $value;
