@@ -155,7 +155,7 @@
         }
         .total-display-table {
             float: right;
-            width: 40%;
+            width: 100%;
             border-collapse: collapse;
         }
         .total-display-table tr {
@@ -333,16 +333,7 @@
         <div style="clear: both;"></div>
 
         <!-- Notes / Payment terms -->
-        <div class="notes">
-            @if ($notes)
-                <div class="notes-label">
-                    {{ $estimate->getPdfLabel('estimate_pdf_notes_label', 'pdf_notes') }}
-                </div>
-                <div>
-                    {!! $notes !!}
-                </div>
-            @endif
-        </div>
+
 
         @include('app.pdf.partials.signature', ['model' => $estimate, 'type' => 'estimate', 'stamp' => $stamp])
     </div>

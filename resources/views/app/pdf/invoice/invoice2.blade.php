@@ -462,15 +462,7 @@
 
         @include('app.pdf.invoice.partials.table')
 
-        <div class="notes">
-            @if ($notes)
-                <div class="notes-label">
-                    {{ $invoice->getPdfLabel('invoice_pdf_notes_label', 'pdf_notes') }}
-                </div>
 
-                {!! $notes !!}
-            @endif
-        </div>
 
         @include('app.pdf.partials.signature', ['model' => $invoice, 'type' => 'invoice', 'stamp' => $stamp])
     </div>

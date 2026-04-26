@@ -489,15 +489,7 @@
             @include('app.pdf.estimate.partials.table')
         </div>
 
-        <div class="notes">
-            @if ($notes)
-                <div class="notes-label">
-                    {{ $estimate->getPdfLabel('estimate_pdf_notes_label', 'pdf_notes') }}
-                </div>
 
-                {!! $notes !!}
-            @endif
-        </div>
 
         @include('app.pdf.partials.signature', ['model' => $estimate, 'type' => 'estimate', 'stamp' => $stamp])
     </div>

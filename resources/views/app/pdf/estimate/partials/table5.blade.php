@@ -71,16 +71,16 @@
                 @endif
             </td>
             <td width="40%" style="vertical-align: top;">
-                <table width="100%" cellspacing="0px" border="0" class="total-display-table @if(count($estimate->items) > 12) page-break @endif">
+                <table width="100%" cellspacing="0px" border="0" class="total-display-table @if(count($estimate->items) > 12) page-break @endif" style="width: 100% !important;">
                     <tr>
-                        <td class="border-0 total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_subtotal_label', 'pdf_subtotal') }}</td>
-                        <td class="border-0 item-cell total-table-attribute-value" style="color: #2e7d32">{!! format_money_pdf($estimate->sub_total, $estimate->customer->currency) !!}</td>
+                        <td colspan="2" class="border-0 total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_subtotal_label', 'pdf_subtotal') }}</td>
+                        <td class="border-0 total-table-attribute-value" style="color: #2e7d32">{!! format_money_pdf($estimate->sub_total, $estimate->customer->currency) !!}</td>
                     </tr>
 
                     @if($estimate->discount > 0)
                         @if ($estimate->discount_per_item === 'NO')
                             <tr>
-                                <td class="pl-10 border-0 total-table-attribute-label">
+                                <td colspan="2" class="pl-10 border-0 total-table-attribute-label">
                                     @if($estimate->discount_type === 'fixed')
                                         {{ $estimate->getPdfLabel('estimate_pdf_discount_label', 'pdf_discount_label') }}
                                     @endif
@@ -88,7 +88,7 @@
                                         {{ $estimate->getPdfLabel('estimate_pdf_discount_label', 'pdf_discount_label') }} ({{$estimate->discount}}%)
                                     @endif
                                 </td>
-                                <td class="text-right border-0 item-cell total-table-attribute-value">
+                                <td class="text-right border-0 total-table-attribute-value">
                                     @if($estimate->discount_type === 'fixed')
                                         {!! format_money_pdf($estimate->discount_val, $estimate->customer->currency) !!}
                                     @endif
@@ -102,10 +102,10 @@
 
                     @if ($estimate->tax_included)
                     <tr>
-                        <td class="border-0 total-table-attribute-label">
+                        <td colspan="2" class="border-0 total-table-attribute-label">
                             {{ $estimate->getPdfLabel('estimate_pdf_net_total_label', 'pdf_net_total') }}
                         </td>
-                        <td class="py-2 border-0 item-cell total-table-attribute-value">
+                        <td class="py-2 border-0 total-table-attribute-value">
                             {!! format_money_pdf($estimate->sub_total - $estimate->discount - $estimate->tax, $estimate->customer->currency) !!}
                         </td>
                     </tr>
@@ -114,14 +114,14 @@
                     @if ($estimate->tax_per_item === 'YES')
                         @foreach ($taxes as $tax)
                             <tr>
-                                <td class="border-0 total-table-attribute-label">
+                                <td colspan="2" class="border-0 total-table-attribute-label">
                                     @if($tax->calculation_type === 'fixed')
                                         {{$tax->name }} ({!! format_money_pdf($tax->fixed_amount, $estimate->customer->currency) !!})
                                     @else
                                         {{$tax->name.' ('.$tax->percent.'%)'}}
                                     @endif
                                 </td>
-                                <td class="py-2 border-0 item-cell total-table-attribute-value" style="color: #d32f2f">
+                                <td class="py-2 border-0 total-table-attribute-value" style="color: #d32f2f">
                                     {!! format_money_pdf($tax->amount, $estimate->customer->currency) !!}
                                 </td>
                             </tr>
@@ -129,14 +129,14 @@
                     @else
                         @foreach ($estimate->taxes as $tax)
                             <tr>
-                                <td class="border-0 total-table-attribute-label">
+                                <td colspan="2" class="border-0 total-table-attribute-label">
                                     @if($tax->calculation_type === 'fixed')
-                                        {{$tax->name }} ({!! format_money_pdf($tax->fixed_amount, $estimate->customer->currency) !!})
+                                        {{$estimate->getPdfLabel('estimate_pdf_tax_label', 'pdf_tax_label')}} ({!! format_money_pdf($tax->fixed_amount, $estimate->customer->currency) !!})
                                     @else
                                         {{$tax->name.' ('.$tax->percent.'%)'}}
                                     @endif
                                 </td>
-                                <td class="border-0 item-cell total-table-attribute-value" style="color: #d32f2f">
+                                <td class="border-0 total-table-attribute-value" style="color: #d32f2f">
                                     {!! format_money_pdf($tax->amount, $estimate->customer->currency) !!}
                                 </td>
                             </tr>
@@ -144,12 +144,12 @@
                     @endif
 
                     <tr>
-                        <td class="py-3"></td>
+                        <td colspan="2" class="py-3"></td>
                         <td class="py-3"></td>
                     </tr>
                     <tr class="total-row">
-                        <td class="total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_total_label', 'pdf_total') }}</td>
-                        <td class="item-cell total-table-attribute-value" style="color: {{ $secondaryColor }}">
+                        <td colspan="2" class="total-table-attribute-label">{{ $estimate->getPdfLabel('estimate_pdf_total_label', 'pdf_total') }}</td>
+                        <td class="total-table-attribute-value" style="color: {{ $secondaryColor }}">
                             {!! format_money_pdf($estimate->total, $estimate->customer->currency)!!}
                         </td>
                     </tr>
@@ -157,4 +157,5 @@
             </td>
         </tr>
     </table>
+</div>
 </div>
