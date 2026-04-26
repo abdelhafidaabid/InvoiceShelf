@@ -324,6 +324,7 @@ const computedFields = computed(() => {
 })
 
 const nextNumber = ref('')
+const rawNextSequenceNumber = ref(1)
 const isFetchingNextNumber = ref(false)
 const isLoadingPlaceholders = ref(false)
 
@@ -386,6 +387,8 @@ function onSelectField(field) {
     if (!confirm(t('settings.customization.warning_start_number'))) {
       return
     }
+
+    field.value = rawNextSequenceNumber.value.toString()
   }
 
   selectedFields.value.push({ ...field, id: Guid.raw() })
@@ -443,6 +446,7 @@ async function getNextNumber() {
 
   if (res.data) {
     nextNumber.value = res.data.nextNumber
+    rawNextSequenceNumber.value = res.data.nextSequenceNumber
   }
 }
 

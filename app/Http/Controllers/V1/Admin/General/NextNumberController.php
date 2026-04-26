@@ -61,6 +61,7 @@ class NextNumberController extends Controller
         return response()->json([
             'success' => true,
             'nextNumber' => $nextNumber,
+            'nextSequenceNumber' => $serial->nextSequenceNumber,
         ]);
     }
 }
