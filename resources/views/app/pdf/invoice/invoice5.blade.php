@@ -92,7 +92,9 @@
 
         /* -- Header -- */
         .header-container {
+            max-width: 700px;
             width: 100%;
+            margin-top: 10px;
             padding: 40px 60px 0 60px;
             position: relative;
         }
@@ -292,7 +294,7 @@
         <div class="header-container">
             <table width="100%">
             <tr>
-                <td width="60%" style="vertical-align: top; padding-top: 30px;">
+                <td width="60%" style="vertical-align: top; padding-top: 30px; padding-left: 5px;">
                     <div class="header-title-text text-uppercase">
                         {{ $invoice->getPdfLabel('invoice_pdf_label', 'pdf_invoice_label') }} <span class="header-year">{{ date('Y') }}</span>
                     </div>
