@@ -94,7 +94,7 @@
           />
         </div>
 
-        <div class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 col-span-full mt-6">
           <BaseInputGroup :label="$t('settings.company_info.tax_id')">
             <BaseInput v-model="companyForm.tax_id" type="text" />
           </BaseInputGroup>
@@ -103,7 +103,21 @@
             <BaseInput v-model="companyForm.vat_id" type="text" />
           </BaseInputGroup>
 
-          
+          <BaseInputGroup :label="$t('settings.company_info.patente')">
+            <BaseInput v-model="companyForm.patente" type="text" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.cnss')">
+            <BaseInput v-model="companyForm.cnss" type="text" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.rc')">
+            <BaseInput v-model="companyForm.rc" type="text" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.ice')">
+            <BaseInput v-model="companyForm.ice" type="text" />
+          </BaseInputGroup>
         </div>
         <BaseInputGroup :label="$t('settings.company_info.pdf_main_color')">
             <input
@@ -182,6 +196,10 @@ const companyForm = reactive({
   logo: null,
   stamp: null,
   tax_id: null,
+  patente: null,
+  cnss: null,
+  rc: null,
+  ice: null,
   vat_id: null,
   pdf_main_color: '#000000',
   pdf_secondary_color: '#000000',

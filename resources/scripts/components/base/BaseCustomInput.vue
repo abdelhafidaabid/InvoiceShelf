@@ -259,6 +259,10 @@ async function getFields() {
           { label: 'Zip Code', value: 'COMPANY_ZIP_CODE' },
           { label: 'Vat Id', value: 'COMPANY_VAT' },
           { label: 'Tax Id', value: 'COMPANY_TAX' },
+          { label: 'Patente', value: 'COMPANY_PATENTE' },
+          { label: 'CNSS', value: 'COMPANY_CNSS' },
+          { label: 'RC', value: 'COMPANY_RC' },
+          { label: 'ICE', value: 'COMPANY_ICE' },
         ],
       })
     }

@@ -37,6 +37,18 @@ class CompanyRequest extends FormRequest
             'pdf_secondary_color' => [
                 'nullable',
             ],
+            'patente' => [
+                'nullable',
+            ],
+            'cnss' => [
+                'nullable',
+            ],
+            'rc' => [
+                'nullable',
+            ],
+            'ice' => [
+                'nullable',
+            ],
             'slug' => [
                 'nullable',
             ],
@@ -56,6 +68,10 @@ class CompanyRequest extends FormRequest
                 'tax_id',
                 'pdf_main_color',
                 'pdf_secondary_color',
+                'patente',
+                'cnss',
+                'rc',
+                'ice',
             ])
             ->toArray();
     }
