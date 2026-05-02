@@ -55,6 +55,16 @@ class CompanyRequest extends FormRequest
             'address.country_id' => [
                 'required',
             ],
+            'address.email' => [
+                'nullable',
+                'email',
+            ],
+            'address.website' => [
+                'nullable',
+            ],
+            'address.fax' => [
+                'nullable',
+            ],
         ];
     }
 

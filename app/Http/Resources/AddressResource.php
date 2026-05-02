@@ -25,6 +25,8 @@ class AddressResource extends JsonResource
             'zip' => $this->zip,
             'phone' => $this->phone,
             'fax' => $this->fax,
+            'email' => $this->email,
+            'website' => $this->website,
             'type' => $this->type,
             'user_id' => $this->user_id,
             'company_id' => $this->company_id,

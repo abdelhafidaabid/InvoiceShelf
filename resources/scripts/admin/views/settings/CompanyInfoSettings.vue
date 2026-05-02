@@ -4,7 +4,9 @@
       :title="$t('settings.company_info.company_info')"
       :description="$t('settings.company_info.section_description')"
     >
-      <BaseInputGrid class="mt-5">
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">{{ $t('settings.company_info.branding') }}</h4>
+        <BaseInputGrid>
         <BaseInputGroup :label="$t('settings.company_info.company_logo')">
           <BaseFileUploader
             v-model="previewLogo"
@@ -23,78 +25,104 @@
           />
         </BaseInputGroup>
       </BaseInputGrid>
+      </div>
 
-      <BaseInputGrid class="mt-5">
-        <BaseInputGroup
-          :label="$t('settings.company_info.company_name')"
-          :error="v$.name.$error && v$.name.$errors[0].$message"
-          required
-        >
-          <BaseInput
-            v-model="companyForm.name"
-            :invalid="v$.name.$error"
-            @blur="v$.name.$touch()"
-          />
-        </BaseInputGroup>
-
-        <BaseInputGroup :label="$t('settings.company_info.phone')">
-          <BaseInput v-model="companyForm.address.phone" />
-        </BaseInputGroup>
-
-        <BaseInputGroup
-          :label="$t('settings.company_info.country')"
-          :error="
-            v$.address.country_id.$error &&
-            v$.address.country_id.$errors[0].$message
-          "
-          required
-        >
-          <BaseMultiselect
-            v-model="companyForm.address.country_id"
-            label="name"
-            :invalid="v$.address.country_id.$error"
-            :options="globalStore.countries"
-            value-prop="id"
-            :can-deselect="true"
-            :can-clear="false"
-            searchable
-            track-by="name"
-          />
-        </BaseInputGroup>
-
-        <BaseInputGroup :label="$t('settings.company_info.state')">
-          <BaseInput
-            v-model="companyForm.address.state"
-            name="state"
-            type="text"
-          />
-        </BaseInputGroup>
-
-        <BaseInputGroup :label="$t('settings.company_info.city')">
-          <BaseInput v-model="companyForm.address.city" type="text" />
-        </BaseInputGroup>
-
-        <BaseInputGroup :label="$t('settings.company_info.zip')">
-          <BaseInput v-model="companyForm.address.zip" />
-        </BaseInputGroup>
-
-        <div>
-          <BaseInputGroup :label="$t('settings.company_info.address')">
-            <BaseTextarea
-              v-model="companyForm.address.address_street_1"
-              rows="2"
+      <div class="mt-8">
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">{{ $t('settings.company_info.company_info') }}</h4>
+        <BaseInputGrid>
+          <BaseInputGroup
+            :label="$t('settings.company_info.company_name')"
+            :error="v$.name.$error && v$.name.$errors[0].$message"
+            required
+          >
+            <BaseInput
+              v-model="companyForm.name"
+              :invalid="v$.name.$error"
+              @blur="v$.name.$touch()"
             />
           </BaseInputGroup>
 
-          <BaseTextarea
-            v-model="companyForm.address.address_street_2"
-            rows="2"
-            :row="2"
-            class="mt-2"
-          />
-        </div>
+          <BaseInputGroup :label="$t('settings.company_info.email')">
+            <BaseInput v-model="companyForm.address.email" type="email" />
+          </BaseInputGroup>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 col-span-full mt-6">
+          <BaseInputGroup :label="$t('settings.company_info.website')">
+            <BaseInput v-model="companyForm.address.website" />
+          </BaseInputGroup>
+        </BaseInputGrid>
+      </div>
+
+      <BaseDivider class="my-8" />
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">{{ $t('settings.company_info.address') }}</h4>
+        <BaseInputGrid>
+          <BaseInputGroup
+            :label="$t('settings.company_info.country')"
+            :error="
+              v$.address.country_id.$error &&
+              v$.address.country_id.$errors[0].$message
+            "
+            required
+          >
+            <BaseMultiselect
+              v-model="companyForm.address.country_id"
+              label="name"
+              :invalid="v$.address.country_id.$error"
+              :options="globalStore.countries"
+              value-prop="id"
+              :can-deselect="true"
+              :can-clear="false"
+              searchable
+              track-by="name"
+            />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.state')">
+            <BaseInput
+              v-model="companyForm.address.state"
+              name="state"
+              type="text"
+            />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.city')">
+            <BaseInput v-model="companyForm.address.city" type="text" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.zip')">
+            <BaseInput v-model="companyForm.address.zip" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.phone')">
+            <BaseInput v-model="companyForm.address.phone" />
+          </BaseInputGroup>
+
+          <BaseInputGroup :label="$t('settings.company_info.fax')">
+            <BaseInput v-model="companyForm.address.fax" />
+          </BaseInputGroup>
+
+          <div class="col-span-full">
+            <BaseInputGroup :label="$t('settings.company_info.address')">
+              <BaseTextarea
+                v-model="companyForm.address.address_street_1"
+                rows="2"
+                class="mb-2"
+              />
+              <BaseTextarea
+                v-model="companyForm.address.address_street_2"
+                rows="2"
+              />
+            </BaseInputGroup>
+          </div>
+        </BaseInputGrid>
+      </div>
+
+      <BaseDivider class="my-8" />
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">{{ $t('settings.company_info.legal_identifiers') }}</h4>
+        <BaseInputGrid>
           <BaseInputGroup :label="$t('settings.company_info.tax_id')">
             <BaseInput v-model="companyForm.tax_id" type="text" />
           </BaseInputGroup>
@@ -118,23 +146,37 @@
           <BaseInputGroup :label="$t('settings.company_info.ice')">
             <BaseInput v-model="companyForm.ice" type="text" />
           </BaseInputGroup>
-        </div>
-        <BaseInputGroup :label="$t('settings.company_info.pdf_main_color')">
-            <input
-              v-model="companyForm.pdf_main_color"
-              type="color"
-              class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+        </BaseInputGrid>
+      </div>
+
+      <BaseDivider class="my-8" />
+
+      <div>
+        <h4 class="text-sm font-semibold text-gray-900 mb-4">{{ $t('settings.company_info.pdf_appearance') }}</h4>
+        <BaseInputGrid>
+          <BaseInputGroup :label="$t('settings.company_info.pdf_main_color')">
+            <div class="flex items-center space-x-3">
+              <input
+                v-model="companyForm.pdf_main_color"
+                type="color"
+                class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+              <span class="text-sm text-gray-500 uppercase">{{ companyForm.pdf_main_color }}</span>
+            </div>
           </BaseInputGroup>
 
           <BaseInputGroup :label="$t('settings.company_info.pdf_secondary_color')">
-            <input
-              v-model="companyForm.pdf_secondary_color"
-              type="color"
-              class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
+            <div class="flex items-center space-x-3">
+              <input
+                v-model="companyForm.pdf_secondary_color"
+                type="color"
+                class="h-10 w-20 cursor-pointer rounded-md border border-gray-300 p-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+              />
+              <span class="text-sm text-gray-500 uppercase">{{ companyForm.pdf_secondary_color }}</span>
+            </div>
           </BaseInputGroup>
-      </BaseInputGrid>
+        </BaseInputGrid>
+      </div>
 
       <BaseButton
         :loading="isSaving"
@@ -206,11 +248,13 @@ const companyForm = reactive({
   address: {
     address_street_1: '',
     address_street_2: '',
+    email: '',
     website: '',
     country_id: null,
     state: '',
     city: '',
     phone: '',
+    fax: '',
     zip: '',
   },
 })
